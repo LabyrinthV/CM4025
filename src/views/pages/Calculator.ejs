@@ -19,7 +19,47 @@
 
         <!-- Quote calculator page -->
         <main id="calculator-page">
-
+            <form id="calculator-form" action="" method="post">
+                <br><br>
+                <label for="timePeriod">Time & Period:</label>
+                <input type="text" id="time" name="time">
+                <select id="period" name="period">
+                    <option value="hour">Hours</option>
+                    <option value="day">Days</option>
+                    <option value="week">Weeks</option>
+                </select>
+                <br><br>
+                <label for="payGrade">Pay Grade:</label>
+                <select id="payGrade" name="payGrade">
+                  <option value="senior">Senior Worker</option>
+                  <option value="standard">Standard Worker</option>
+                  <option value="junior">Junior Worker</option>
+                </select>
+                <br><br>
+                <label for="ongoing">Ongoing Costs:</label>
+                <input type="text" id="ongoing" name="ongoingCosts">
+                <select id="ongoingCost" name="ongoingCost">
+                    <option value="hour">Hours</option>
+                    <option value="day">Days</option>
+                    <option value="week">Weeks</option>
+                </select>
+                <br><br>
+                <label for="oneOff">One-off Costs:</label>
+                <input type="text" id="ongoing" name="ongoingCosts">
+                <select id="oneOffCost" name="oneOffCost">
+                    <option value ="1">1</option>
+                    <option value ="2">2</option>
+                    <option value ="3">3</option>
+                    <option value ="4">4</option>
+                    <option value ="5">5</option>
+                    <option value ="6">6</option>
+                    <option value ="7">7</option>
+                    <option value ="8">8</option>
+                    <option value ="9">9</option>
+                    <option value ="10">10</option>
+                </select>
+                <button>Calculate Quote</button>
+              </form>
         </main>
 
         <!-- Extra Stuff -->
@@ -28,6 +68,7 @@
             <%- include('../partials/footer'); %>
     
         </footer>
+        <script src="/scripts/CalculatorForm.js"></script>
     </body>
 
 </html>

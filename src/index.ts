@@ -13,5 +13,13 @@ app.get("/", function(req, res){
     res.render('pages/Calculator');
 });
 
+app.post("/Calculator", function(req, res){
+
+    console.log(req.body)
+    res.json({
+        
+    });
+})
+
 app.listen(8080);
 
