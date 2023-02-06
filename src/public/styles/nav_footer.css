@@ -1,0 +1,354 @@
+/*NAV-BAR RESIZE, STYLING AND LAYOUT*/
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}    
+
+.nav-container{
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 0;
+    font-family: 'Raleway', sans-serif; 
+    /* height: 180px; */
+    background-color: rgb(145, 118, 143);
+    
+    z-index: 100;
+    height: 10%;
+}
+ 
+
+#account img{
+    width: 60px;
+    height: 60px;
+    margin-right: 40px;
+    margin-left: 40px;
+    transition: all .4s ease;
+}
+
+
+
+#account a{
+    padding: 0;
+}
+
+
+.nav-links{
+    float: right;  
+    padding: 0;
+    margin-right: 3%;
+    width: 60%;
+    height: 100%;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    flex-wrap: nowrap;
+}
+
+.nav-links li{
+    list-style: none;
+    
+}
+
+.nav-links a{
+    color: rgb(255, 255, 255);
+    text-decoration: none;
+    font-size: 30px;
+    display: block;
+    padding: 1em;
+    white-space: nowrap;
+   
+}
+
+.nav-item a{
+    transition: color .5s;
+}
+
+
+.nav-item a:hover{
+    color: rgb(15, 14, 19);
+    text-decoration: underline;
+    text-underline-offset: 5px;
+}
+
+.fa-angle-down{
+    color: rgb(255, 255, 255);
+    position: fixed;
+    padding-top: 5px;
+    padding-left: 5px;
+}
+
+
+
+/* beginning the dropdown from here*/
+
+.dropdown{
+    float: left;
+    overflow: hidden;
+    
+}
+
+.dropdown .dropd-btn{
+    font-size: 30px;
+    border: none;
+    outline: none;
+    color: rgb(255, 255, 255);
+    padding: 30px;
+    background-color: inherit;
+    font-family: inherit;
+    margin: 0;
+    transition: color .5s ;
+    white-space: nowrap;
+}
+
+
+
+.dropd-btn:hover{
+    color: black;
+    cursor: pointer;
+    
+}
+
+.dropd-menu{
+    display: none;
+    position: absolute;
+    background-color: #383032;
+    border-radius: 10px;
+    min-width: 140px;
+    box-shadow: 0px 8px 0px 0px #c487df;
+    z-index: 5;
+}
+
+
+
+.dropd-menu a{
+    float: none;
+    color: rgb(255, 255, 255);
+    padding: 30px 36px;
+    text-decoration: none;
+    display: block;
+    text-align: left;
+    font-size: 25px;
+    transition: color .5s ;
+}
+
+.dropd-menu a:hover{
+    
+    color: rgb(161, 110, 255);
+    
+}
+
+.dropdown:hover .dropd-menu{
+    display:block;
+}
+
+
+.nav-item a:active{
+    color: #0d4f9b;
+}
+
+
+#nav-toggle{
+    position: absolute;
+    top: -50px;
+}
+
+.nav-container .burger-icon{
+    display: none;
+    position: absolute;
+    right: 5%;
+    top: 50%;
+    cursor: pointer;
+    transform: translateY(-50%);
+}
+
+
+.nav-container .burger-icon .line{
+    width: 40px;
+    height: 6px;
+    background-color: white;
+    margin: 5px;
+    border-radius: 2px;
+    transition: all .3s ease-in-out;
+}
+
+    /*BEGIN TEST FOR SCROLL STICKINESS*/
+
+    /* .test1, .test2, .test3, .test4{
+        background-color: rgb(234, 236, 105);
+        width: 100vw;
+        height: 500px;
+    } */
+
+    /*END TEST FOR SCROLL STICKINESS*/
+
+
+    /*MEDIA QUERY FOR NAV-BAR RESIZE*/
+
+@media  screen and (max-width: 1358px){
+
+    .nav-container{
+        z-index: 100;   /* required as the highest stack order for dropdown to cover the footer */
+    }
+
+    .nav-container .nav-links{
+        float: none;
+        position: fixed;
+        z-index: 99;
+        background-color: rgb(22, 20, 17);
+        top: 180px;
+        left: 0;
+        right: 0;
+        bottom:100%;
+        width: 100vw;
+        height: auto;
+        flex-direction: column;
+        overflow: hidden;
+        transition: all .5s ease-in-out;
+    }
+
+    .dropdown{
+        width: inherit;
+        display: flex;
+        justify-content: center;
+    }
+
+    .nav-container .nav-links a{
+        font-size: 20px;
+        
+    }
+
+    .nav-container .nav-links a:hover{
+        color: rgb(161, 110, 255);
+    }
+
+    .dropdown .dropd-btn{
+        font-size: 20px;
+        
+    }
+
+    .dropd-btn:hover:not(.dropdown){
+        color: rgb(161, 110, 255);
+        text-decoration: underline;
+        text-underline-offset: 5px;
+    }
+
+
+    .dropd-menu{
+        margin:auto;
+        width: 30%;
+        top:53vh;
+    }
+
+    .dropd-menu a{
+        text-align: center;
+       
+    }
+
+    .fa-angle-down{
+        visibility: hidden;
+    }
+
+    .nav-container .burger-icon{
+        display: block;
+    }
+
+    .nav-container :checked ~ .nav-links{
+        bottom: 0;
+        
+    }
+
+    .nav-container :checked ~ .burger-icon .line:nth-child(1){
+        transform: translateY(10px) rotate(180deg);
+    }
+
+    .nav-container :checked ~ .burger-icon .line:nth-child(3){
+        transform: translateY(-10px) rotate(-180deg);
+    }
+
+    .nav-container :checked ~ .burger-icon .line:nth-child(2){
+        opacity: 0;
+    }
+
+
+}
+
+
+
+    /*PAGE FOOTER SYLING AND LAYOUT
+    
+        - Inserting the footer code right after the navbar will cause the footer to cover the navbar due to its relative position
+        - Testing navbar stickiness with 3 divs in order to create scroll necessity
+    
+    */
+
+
+
+.footer-container{
+    background-color: #433b4e;
+    color: #e6fff5;
+    padding-top: 40px;
+    font-family: 'Raleway', sans-serif;
+    width: 100vw;
+    height: auto;
+    position: relative;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 1;
+}
+
+.media-icon-wrapper{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    text-align: center;
+    border-bottom: solid .5px #b2a7bd;
+}
+
+.media-icon-wrapper #footer-title{
+    font-size: 3.75vw;
+    font-weight: 500;
+    text-transform: capitalize;
+    line-height: 5rem;
+}
+
+.media-icon-wrapper #footer-info{
+    max-width: 500px;
+    margin: 10px auto;
+    line-height: 28px;
+    font-size: 1.4vw;
+    text-align: justify;
+}
+
+
+.sign-wrapper{
+    background-color:#433b4e;
+    width: 100vw;
+    height: 140px;
+    padding: 0px 0;
+    text-align: center;
+
+}
+
+.sign-wrapper #signature{
+    font-size: 14px;
+    letter-spacing: 2px;
+    word-spacing: 3.5px;
+    text-transform: capitalize;
+
+}
+
+.sign-wrapper span{
+    text-transform: uppercase;
+    opacity: .4;
+    font-weight: 200;
+}
+
+
+.footer-links, #signature{
+    margin:25px;
+}
