@@ -17,14 +17,14 @@ app.get("/", function(req, res){
 app.post("/Calculator", express.urlencoded({extended:true}), function(req, res){
 
     const formData = {
-        time: req.body.time,
+        time: parseInt(req.body.time),
         period: req.body.period,
         payGrade: req.body.payGrade,
-        ongoingCosts: req.body.ongoingCosts,
+        ongoingCosts: parseInt(req.body.ongoingCosts),
         frequency: req.body.frequency,
-        oneOffCost: req.body.oneOffCost
+        oneOffCost: parseInt(req.body.oneOffCost)
     }
-
+    console.log(formData)
     let finalBudget = calculateBudget(formData)
 
     res.json({

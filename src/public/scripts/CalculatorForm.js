@@ -7,6 +7,9 @@ formElement.addEventListener("submit", function(e){
     fetch("/Calculator", {
         method:"post",
         body: formData
-    }).then(res=>res.json()).then(res=>console.log(res))
+    }).then(res=>res.json()).then(res=>{
+        let output = document.getElementById("output")
+        output.innerHTML= new Intl.NumberFormat('en-GB', { style: 'currency', currency: 'GBP' }).format(res.finalBudget)
+    })
 })
 
