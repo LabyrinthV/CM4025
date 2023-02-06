@@ -49,7 +49,7 @@ const payGrades = {
     }
   
     // Calculate final budget figure
-    let finalBudget = hourlyRate * options.time + options.oneOffCost + (options.ongoingCosts * );
+    let finalBudget = hourlyRate * options.time + options.oneOffCost + options.ongoingCosts;
   
     // Return final budget figure
     return finalBudget;
