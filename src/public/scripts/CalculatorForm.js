@@ -2,7 +2,7 @@ const formElement = document.getElementById("calculator-form")
 
 formElement.addEventListener("submit", function(e){
     e.preventDefault()
-    let formData = new FormData(formElement)
+    let formData = new URLSearchParams(new FormData(formElement))
 
     fetch("/Calculator", {
         method:"post",

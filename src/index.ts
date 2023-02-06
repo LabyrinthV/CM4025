@@ -1,5 +1,6 @@
 import express from "express"
 import path from "node:path"
+import { calculateBudget } from "./classes/calculator";
 
 const app = express();
 
@@ -13,11 +14,21 @@ app.get("/", function(req, res){
     res.render('pages/Calculator');
 });
 
-app.post("/Calculator", function(req, res){
+app.post("/Calculator", express.urlencoded({extended:true}), function(req, res){
 
-    console.log(req.body)
+    const formData = {
+        time: req.body.time,
+        period: req.body.period,
+        payGrade: req.body.payGrade,
+        ongoingCosts: req.body.ongoingCosts,
+        frequency: req.body.frequency,
+        oneOffCost: req.body.oneOffCost
+    }
+
+    let finalBudget = calculateBudget(formData)
+
     res.json({
-        
+        finalBudget
     });
 })
 
