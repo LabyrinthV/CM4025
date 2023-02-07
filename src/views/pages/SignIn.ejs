@@ -19,7 +19,31 @@
 
         <!-- Sign in option and link to sign up page -->
         <main id="login-page">
+            <p class="intro">Login into your account</p>
 
+            <div id="loginIN">
+                <form action = "/Login" method = "POST">
+                    <label for="uname"><b>Username</b></label>
+                    <input type="text" placeholder="Enter Username" name="username" required>
+            
+                    <label for="pword"><b>Password</b></label>
+                    <input type="password" placeholder="Enter Password" name="password" required>
+            
+                    <button type="submit" id="signIN">Login</button>
+                </form>
+
+                <label id="remember">
+                    <input type="checkbox" checked="checked">
+                    Remember me
+                </label>
+                
+                
+                <span class="pword"><a href="#">Forgot password?</a></span>
+            </div>
+
+            <!-- Signup -->
+            <p class="toSignUp">Don't have an account?</p>
+            <button type="button" id="signUP" onclick="document.location='/SignUp'">Sign-up Here</button>
         </main>
 
         <!-- Extra Stuff -->
