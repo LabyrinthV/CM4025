@@ -36,7 +36,8 @@ let db: MongoClient;
 // Get routes
 
 app.get("/", function(req, res){
-    res.render('pages/Calculator');
+    let loggedin = req.session.loggedin;
+    res.render('pages/Calculator', {loggedin});
 });
 
 
@@ -69,7 +70,7 @@ app.get('/Account', async function(req, res){
 
         if(!req.session.user){res.redirect('/SignIn');return;}
 
-        var uname = req.session.currentuser;
+        let uname = req.session.currentuser;
  
         //Find user from database and let express return the result
 
@@ -85,6 +86,7 @@ app.get('/Account', async function(req, res){
     
 });
 
+// Post routes
 
 app.post("/Calculator", express.urlencoded({extended:true}), function(req, res){
 
@@ -103,6 +105,40 @@ app.post("/Calculator", express.urlencoded({extended:true}), function(req, res){
         finalBudget
     });
 })
+
+app.post("/SignIn", express.urlencoded({extended:true}), async function(req, res){
+    let uname = req.body.username;
+    let pword = req.body.password;
+
+    const user = await db.db('quotesdb').collection('users').findOne({username: uname, password: pword})
+    if (!user) {
+        res.status(401).send('User not found')
+        return;
+    }
+    req.session.loggedin = true;
+    req.session.currentuser = uname;
+    res.redirect('/Calculator');
+});
+
+app.post("/SignUp", express.urlencoded({extended:true}), async function(req, res){
+    let data = {
+        username: req.body.username,
+        password: req.body.password,
+        email: req.body.email,
+        name: req.body.name,
+        quotes: []
+    };
+    await db.db('quotesdb').collection('users').insertOne(data);
+    console.log("User created");
+    res.redirect('/Account');
+});
+
+app.post("/AddToQuotes", express.urlencoded({extended:true}), async function(req, res){
+    if (!req.session.loggedin) { return; }
+    let uname = req.session.currentuser;
+
+
+
 
 mongoClient.connect().then((client) => {
     console.log("Mongo Connected")

@@ -1,21 +1,16 @@
 <!--PAGE NAVIGATION-BAR-->
 
-
-    <input id="nav-toggle" type="checkbox">
-    <ul class="nav-links">
-        <li class="nav-item"><a href="/">Home</a></li>
-        <li class="dropdown">
-            <button class="dropd-btn">View More
-                <i class="fa fa-angle-down"></i>
-            </button>
-            <div class="dropd-menu">
-                <a href="/LogOut">Sign-Out</a>
-            </div>
-        </li>
-        <li class="nav-item" id="account"><a href="/Profile"><img src="" alt="account-icon"></a></li>
-    </ul>
-    <label class="burger-icon" for="nav-toggle">
-        <div class="line"></div>
-        <div class="line"></div>
-        <div class="line"></div>
-    </label>
+<nav class="nav-bar">
+    <div class="nav-left">
+        <a href="/">Home</a>
+    </div>
+    <div class="nav-right">
+        <% if (loggedin) { %>
+            <a href="/Account">Profile</a>
+            <a href="/Logout">Logout</a>
+        <% } else { %>
+            <a href="/SignIn">Sign In</a>
+            <a href="/SignUp">Sign Up</a>
+        <% } %>
+    </div>
+</nav>
