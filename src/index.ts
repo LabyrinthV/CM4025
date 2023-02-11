@@ -7,6 +7,14 @@ import { MongoClient } from "mongodb"
 
 import { calculateBudget } from "./classes/calculator";
 
+declare module "express-session" {
+    interface SessionData {
+        user: string;
+        currentuser: string;
+        loggedin: boolean;
+    }
+}
+
 const url = process.env.mongourl ?? ""
 
 const mongoClient = new MongoClient(url)
@@ -31,12 +39,22 @@ app.get("/", function(req, res){
     res.render('pages/Calculator');
 });
 
-app.get("/Account", function(req, res){
-    res.render('pages/Account');
-});
+
 
 app.get("/SignIn", function(req, res){
     res.render('pages/SignIn');
+});
+
+app.get('/LogOut', function(req, res){
+    req.session.loggedin = false;
+    req.session.destroy(function(err) {
+        if(err) {
+            console.log(err);
+        } else {
+            console.log("Logged out successfully.");
+            res.redirect('/Calculator');
+        }
+    });
 });
 
 app.get("/SignUp", function(req, res){
@@ -44,23 +62,27 @@ app.get("/SignUp", function(req, res){
 });
 
 //Account route
-app.get('/Profile', function(req, res){
+app.get('/Account', async function(req, res){
+
     //if the user is not logged in redirect them to the login page
-    //if(!req.session.loggedin){res.redirect('/SignIn');return;}
+    if(req.session) {
 
-    //var uname = req.session.currentuser;
+        if(!req.session.user){res.redirect('/SignIn');return;}
+
+        var uname = req.session.currentuser;
  
-    //Find user from database and let express return the result
-    // db.collection('people').findOne({"login.username": uname}, function(err, result) {
-    //     if (err) throw err;
+        //Find user from database and let express return the result
 
-        
+        const user = await db.db('quotesdb').collection('users').findOne({"login.username": uname})
+        if (!user) {
+            res.status(401).send('User not found')
+        }
+        res.render('pages/Account', {            
+            user
+        })
+    }
 
-    //     //console.log(JSON.stringify(result));
-    //     res.render('pages/Account', {
-    //         user: result
-    //     })
-    // });
+    
 });
 
 
