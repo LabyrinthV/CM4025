@@ -5,12 +5,12 @@
         <a href="/">Home</a>
     </div>
     <div class="nav-right">
-        <% if (loggedin) { %>
+        <% if (locals.loggedin) { %>
             <a href="/Account">Profile</a>
             <a href="/Logout">Logout</a>
         <% } else { %>
-            <a href="/SignIn">Sign In</a>
-            <a href="/SignUp">Sign Up</a>
+            <a href="/SignIn">Sign-In</a>
+            <a href="/SignUp">Sign-Up</a>
         <% } %>
     </div>
 </nav>

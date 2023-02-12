@@ -1,3 +1,66 @@
+/* Path: src\public\styles\style.css */
+
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
 body, main {
-    overflow-x: hidden;
-  }
+  font-family: 'Roboto', sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+  color: #333;
+  background-color: #fff;
+}
+h2 {
+  margin: 1rem 0rem;
+}
+
+.page-wrap {
+  max-width: 70%;
+  width: 100%;
+  margin: 0 auto;
+}
+
+/* nav styles */
+
+.nav-container {
+  display: flex;
+  justify-content: center;
+  background-color: #333;
+  padding: 10px 0;
+
+}
+
+.nav-bar {
+  max-width: 70%;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+
+.nav-bar a {
+  text-decoration: none;
+  color: #fff;
+  transition: all 0.2s ease-in-out;
+  padding: 5px 15px;
+  border-radius: 15px;
+}
+
+.nav-bar a:hover {
+  background-color: dodgerblue;
+}
+
+.nav-left, .nav-right {
+  display: flex;
+  gap: 10px;
+}
+
+/* form styles */
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
