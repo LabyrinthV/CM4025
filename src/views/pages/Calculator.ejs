@@ -25,34 +25,41 @@
                         <input type="text" id="projectName" name="projectName">
                       <% } %>
                     <label for="timePeriod">Time & Period:</label>
-                    <input type="text" id="time" name="time">
-                    <select id="period" name="period">
-                        <option value="hour">Hours</option>
-                        <option value="day">Days</option>
-                        <option value="month">Months</option>
-                    </select>
-                    <br><br>
+                    <div class="form-controls">
+                        <input type="text" id="time" name="time">
+                        <select id="period" name="period">
+                            <option value="hour">Hours</option>
+                            <option value="day">Days</option>
+                            <option value="month">Months</option>
+                        </select>
+                    </div>
                     <label for="payGrade">Pay Grade:</label>
-                    <select id="payGrade" name="payGrade">
-                      <option value="senior">Senior Worker</option>
-                      <option value="standard">Standard Worker</option>
-                      <option value="junior">Junior Worker</option>
-                    </select>
-                    <br><br>
+                    <div class="form-controls">
+                        <select id="payGrade" name="payGrade">
+                            <option value="senior">Senior Worker</option>
+                            <option value="standard">Standard Worker</option>
+                            <option value="junior">Junior Worker</option>
+                          </select>
+                    </div>
                     <label for="ongoing">Ongoing Costs:</label>
-                    <input type="text" id="ongoing" name="ongoingCosts">
-                    <select id="ongoingCost" name="frequency">
-                        <option value="week">Weekly</option>
-                        <option value="month">Monthly</option>
-                        <option value="year">Annual</option>
-                    </select>
-                    <br><br>
+                    <div class="form-controls">
+                        <input type="text" id="ongoing" name="ongoingCosts">
+                        <select id="ongoingCost" name="frequency">
+                            <option value="week">Weekly</option>
+                            <option value="month">Monthly</option>
+                            <option value="year">Annual</option>
+                        </select>
+                    </div>
                     <label for="oneOff">One-off Costs:</label>
-                    <input type="text" id="oneOffCost" name="oneOffCost">
-                    <button>Calculate Quote</button>
+                    <div class="form-controls">
+                        <input type="text" id="oneOffCost" name="oneOffCost">
+                    </div>
+                    <div class="form-controls">
+                        <button>Calculate Quote</button>
+                    </div>
                   </form>
                   <div id="output"></div>
-                  <div id="save">
+                  <div class="form-controls">
                     <% if (locals.loggedin) { %>
                       <button id="saveQuote">Save Quote</button>
                     <% } %>

@@ -64,3 +64,24 @@ form {
   flex-direction: column;
   gap: 10px;
 }
+
+.form-controls {
+  display: flex; 
+  gap: 0.5rem;
+}
+
+.form-controls input, .form-controls select {
+  border: 1px solid #333;
+  padding: 0px 0.5rem;
+  height: 30px;
+  border-radius: 5px;
+}
+
+.form-controls button {
+  height: 30px;
+  border-radius: 5px;
+  padding: 0 0.5rem;
+  background-color: dodgerblue;
+  color: #fff;
+  border: none;
+}
