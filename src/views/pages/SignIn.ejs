@@ -18,18 +18,25 @@
         </div>
 
         <!-- Sign in option and link to sign up page -->
-        <main id="login-page">
-            <p class="intro">Login into your account</p>
-
-            <div id="loginIN">
+        <div class="page-wrap">
+            <main id="login-page">
+                <h2 class="intro">Login</h2>
+    
                 <form action = "/Login" method = "POST">
                     <label for="uname"><b>Username</b></label>
-                    <input type="text" placeholder="Enter Username" name="username" required>
+                    <div class="form-controls">
+                        <input type="text" placeholder="Enter Username" name="username" required>
+                    </div>
+                    
             
                     <label for="pword"><b>Password</b></label>
-                    <input type="password" placeholder="Enter Password" name="password" required>
-            
-                    <button type="submit" id="signIN">Login</button>
+                    <div class="form-controls">
+                        <input type="password" placeholder="Enter Password" name="password" required>
+                    </div>
+                    <div class="form-controls">
+                        <button type="submit" id="signIN">Login</button>
+                    </div>
+
                 </form>
 
                 <label id="remember">
@@ -39,12 +46,16 @@
                 
                 
                 <span class="pword"><a href="#">Forgot password?</a></span>
-            </div>
-
-            <!-- Signup -->
-            <p class="toSignUp">Don't have an account?</p>
-            <button type="button" id="signUP" onclick="document.location='/SignUp'">Sign-up Here</button>
-        </main>
+    
+                <!-- Signup -->
+                <p class="toSignUp">Don't have an account?</p>
+                <div class="form-controls">
+                    <button type="button" id="signUP" onclick="document.location='/SignUp'">Sign-up Here</button>
+                </div>
+                
+            </main>
+        </div>
+        
 
         <!-- Extra Stuff -->
         <div class="footer-container">
