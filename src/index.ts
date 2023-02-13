@@ -68,7 +68,7 @@ app.get('/Account', async function(req, res){
     //if the user is not logged in redirect them to the login page
     if(req.session) {
 
-        if(!req.session.user){res.redirect('/SignIn');return;}
+        if(!req.session.currentuser){res.redirect('/SignIn');return;}
 
         let uname = req.session.currentuser;
  
@@ -106,7 +106,7 @@ app.post("/Calculator", express.urlencoded({extended:true}), function(req, res){
     });
 })
 
-app.post("/SignIn", express.urlencoded({extended:true}), async function(req, res){
+app.post("/Login", express.urlencoded({extended:true}), async function(req, res){
     let uname = req.body.username;
     let pword = req.body.password;
 
@@ -117,15 +117,16 @@ app.post("/SignIn", express.urlencoded({extended:true}), async function(req, res
     }
     req.session.loggedin = true;
     req.session.currentuser = uname;
-    res.redirect('/Calculator');
+    res.redirect('/');
 });
 
-app.post("/SignUp", express.urlencoded({extended:true}), async function(req, res){
+app.post("/AddUser", express.urlencoded({extended:true}), async function(req, res){
     let data = {
         username: req.body.username,
         password: req.body.password,
         email: req.body.email,
-        name: req.body.name,
+        firstname: req.body.firstname,
+        lastname: req.body.lastname,
         quotes: []
     };
     await db.db('quotesdb').collection('users').insertOne(data);
