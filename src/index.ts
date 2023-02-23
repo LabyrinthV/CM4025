@@ -74,7 +74,7 @@ app.get('/Account', async function(req, res){
  
         //Find user from database and let express return the result
 
-        const user = await db.db('quotesdb').collection('users').findOne({"login.username": uname})
+        const user = await db.db('quotesdb').collection('users').findOne({"username": uname})
         if (!user) {
             res.status(401).send('User not found')
         }
