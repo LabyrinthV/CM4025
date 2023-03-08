@@ -5,6 +5,7 @@ interface Budget
     time: number,
     period: string,
     payGrade: "junior" | "standard" | "senior",
+    amount: number,
     ongoingCosts: number,
     frequency: string,
     oneOffCost: number

@@ -2,9 +2,9 @@ import "dotenv/config"
 import express from "express"
 import express_session from "express-session"
 import path from "node:path"
-import { MongoClient } from "mongodb"
-
-
+import mongoose from 'mongoose';
+import User from "./classes/User";
+import Quote from "./classes/Quote";
 import { calculateBudget } from "./classes/calculator";
 
 declare module "express-session" {
@@ -17,11 +17,13 @@ declare module "express-session" {
 
 const url = process.env.mongourl ?? ""
 
-const mongoClient = new MongoClient(url)
+
 
 const app = express();
 
-app.use(express_session({secret:'session'}))
+app.use(express_session({secret:'session',
+                        resave: false,
+                        saveUninitialized: false}))
 
 app.use(express.static(path.join(__dirname, "/public")))
 
@@ -29,7 +31,6 @@ app.set("view engine", "ejs")
 
 app.set("views", path.join(__dirname, "views"))
 
-let db: MongoClient;
 
 
 
@@ -74,7 +75,7 @@ app.get('/Account', async function(req, res){
  
         //Find user from database and let express return the result
 
-        const user = await db.db('quotesdb').collection('users').findOne({"username": uname})
+        const user = await User.findOne({"username": uname})
         if (!user) {
             res.status(401).send('User not found')
         }
@@ -91,9 +92,10 @@ app.get('/Account', async function(req, res){
 app.post("/Calculator", express.urlencoded({extended:true}), function(req, res){
 
     const formData = {
-        time: parseInt(req.body.time),
+        time: req.body.time,
         period: req.body.period,
         payGrade: req.body.payGrade,
+        amount: req.body.payGradeAmount,
         ongoingCosts: parseInt(req.body.ongoingCosts),
         frequency: req.body.frequency,
         oneOffCost: parseInt(req.body.oneOffCost)
@@ -110,7 +112,7 @@ app.post("/Login", express.urlencoded({extended:true}), async function(req, res)
     let uname = req.body.username;
     let pword = req.body.password;
 
-    const user = await db.db('quotesdb').collection('users').findOne({username: uname, password: pword})
+    const user = await User.findOne({username: uname, password: pword})
     if (!user) {
         res.status(401).send('User not found')
         return;
@@ -129,7 +131,7 @@ app.post("/AddUser", express.urlencoded({extended:true}), async function(req, re
         lastname: req.body.lastname,
         quotes: []
     };
-    await db.db('quotesdb').collection('users').insertOne(data);
+    await new User(data).save();
     console.log("User created");
     res.redirect('/Account');
 });
@@ -137,12 +139,28 @@ app.post("/AddUser", express.urlencoded({extended:true}), async function(req, re
 app.post("/AddToQuotes", express.urlencoded({extended:true}), async function(req, res){
     if (!req.session.loggedin) { return; }
     let uname = req.session.currentuser;
+    const user = await User.findOne({"username": uname})
+    if (!user) {
+        res.status(401).send('User not found')
+        return;
+    }
+    let quote = req.body.quote;
+
+    await new Quote(quote).save()
+    if (user.quotes) {
+        user.quotes.push(quote._id);
+        await user.save();
+        console.log("Quote added to user");
+        res.status(200).send('Quote added to user');
+    } else {
+        res.status(500).send('Failed to add quote to user');
+    }
+
 });
 
 
-
-mongoClient.connect().then((client) => {
+mongoose.set('strictQuery', false);
+mongoose.connect(process.env.mongourl || "").then(() => {
     console.log("Mongo Connected")
     app.listen(8080);
-    db=client
 })
