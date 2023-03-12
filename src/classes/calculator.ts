@@ -1,11 +1,12 @@
 import { time } from "console";
+import { calculatorForm } from "../types/CalculatorForm";
 
 interface Budget
 {
     time: number,
     period: string,
     payGrade: "junior" | "standard" | "senior",
-    amount: number,
+    payGradeAmount: number,
     ongoingCosts: number,
     frequency: string,
     oneOffCost: number
@@ -29,38 +30,45 @@ const payGrades = {
 
   
   // Function to calculate final budget figure
-  export function calculateBudget(options:Budget) {
-    // Look up hourly rate for pay grade
-    let hourlyRate = payGrades[options.payGrade].hourly;
+  export function calculateBudget(options:calculatorForm) {
+    let personelCost = 0
+    let maxWorkHours = 0
 
-    // Fudge factor to hide exact hourly rate from users
-    let fudgeFactor = Math.random()*.5 + .75;
-  
-    // Apply fudge factor to hourly rate
-    hourlyRate *= fudgeFactor;
+    for(let i = 0; i < options.time.length; i++){
+        // Look up hourly rate for pay grade
+        let hourlyRate = payGrades[options.payGrade[i]].hourly;
 
-    // Calculate hours worked P.S Assume worker works 8 hour work days 5 times a week
-    let workHours = options.time
+        // Fudge factor to hide exact hourly rate from users
+        let fudgeFactor = Math.random()*.5 + .75;
+    
+        // Apply fudge factor to hourly rate
+        hourlyRate *= fudgeFactor;
 
-    if(options.period === 'day') {
-        workHours *= 8
-    } else if (options.period === 'month') {
-        workHours *= 160
+        // Calculate hours worked P.S Assume worker works 8 hour work days 5 times a week
+        let workHours = options.time[i]
+
+        if(options.period[i] === 'day') {
+            workHours *= 8
+        } else if (options.period[i] === 'month') {
+            workHours *= 160
+        }
+        if (workHours > maxWorkHours) maxWorkHours = workHours;
+        personelCost += workHours * hourlyRate * options.payGradeAmount[i]
     }
 
-    let personelCost = workHours * hourlyRate
+    
 
     let frequencyValue: number
     let ongoingCosts = options.ongoingCosts
 
     if(options.frequency === "week"){
-        let projectWeeks = workHours/40
+        let projectWeeks = maxWorkHours/40
         ongoingCosts *= projectWeeks
     } else if (options.frequency === "month"){
-        let projectMonths = workHours/160
+        let projectMonths = maxWorkHours/160
         ongoingCosts *= projectMonths
     } else {
-        let projectYears = workHours/2080
+        let projectYears = maxWorkHours/2080
         ongoingCosts *= projectYears
     }
   
