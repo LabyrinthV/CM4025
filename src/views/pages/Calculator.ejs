@@ -24,7 +24,7 @@
                         <label for="projectName">Project Name:</label>
                         <input type="text" id="projectName" name="projectName">
                       <% } %>
-                    <div id="workers">
+                    <div id="subtasks">
                         <button class="form-controls" onclick="addWorkerRow()">Add Worker(s)</button>
                         <div>
                             <label for="timePeriod">Time & Period:</label>
@@ -46,21 +46,22 @@
                                 </select>
                                 <input type="number" id="payGradeAmount" name="payGradeAmount">
                             </div>
+                            <label for="ongoing">Ongoing Costs:</label>
+                            <div class="form-controls">
+                                <input type="number" id="ongoing" name="ongoingCosts">
+                                <select id="ongoingCost" name="frequency">
+                                    <option value="week">Weekly</option>
+                                    <option value="month">Monthly</option>
+                                    <option value="year">Annual</option>
+                                </select>
+                            </div>
+                            <label for="oneOff">One-off Costs:</label>
+                            <div class="form-controls">
+                                <input type="number" id="oneOffCost" name="oneOffCost">
+                            </div>
                         </div>   
                     </div>
-                    <label for="ongoing">Ongoing Costs:</label>
-                    <div class="form-controls">
-                        <input type="number" id="ongoing" name="ongoingCosts">
-                        <select id="ongoingCost" name="frequency">
-                            <option value="week">Weekly</option>
-                            <option value="month">Monthly</option>
-                            <option value="year">Annual</option>
-                        </select>
-                    </div>
-                    <label for="oneOff">One-off Costs:</label>
-                    <div class="form-controls">
-                        <input type="number" id="oneOffCost" name="oneOffCost">
-                    </div>
+
                     <div class="form-controls">
                         <button>Calculate Quote</button>
                     </div>

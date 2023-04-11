@@ -1,0 +1,36 @@
+<template id="subtask-template">
+        <div>
+            <label for="timePeriod">Time & Period:</label>            
+            <div class="form-controls">
+                <input type="number" id="time" name="time">
+                <select id="period" name="period">
+                    <option value="hour">Hours</option>
+                    <option value="day">Days</option>
+                    <option value="month">Months</option>
+                </select>
+            </div>
+            <label for="payGrade">Pay Grade:</label>
+            <div class="form-controls">
+                <select name="payGrade" id="payGrade">
+                    <option value="standard">Standard</option>
+                    <option value="junior">Junior</option>
+                    <option value="senior">Senior</option>
+                </select>
+                <input type="number" id="payGradeAmount" name="payGradeAmount">
+            </div>
+            <label for="ongoing">Ongoing Costs:</label>
+            <div class="form-controls">
+                <input type="number" id="ongoing" name="ongoingCosts">
+                <select id="ongoingCost" name="frequency">
+                    <option value="week">Weekly</option>
+                    <option value="month">Monthly</option>
+                    <option value="year">Annual</option>
+                </select>
+            </div>
+            <label for="oneOff">One-off Costs:</label>
+            <div class="form-controls">
+                <input type="number" id="oneOffCost" name="oneOffCost">
+            </div>
+            <button onclick="removeSubtaskRow(this)">Delete</button>
+        </div>   
+</template>

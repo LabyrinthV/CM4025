@@ -14,15 +14,15 @@ formElement.addEventListener("submit", function(e){
     })
 })
 
-function addWorkerRow() {
-    const template = document.getElementById("worker-template")
+function addSubtaskRow() {
+    const template = document.getElementById("subtask-template")
     const content = template.content.cloneNode(true)
 
-    const workerList = document.getElementById("workers")
+    const workerList = document.getElementById("subtasks")
     workerList.appendChild(content)
 }
 
-function removeWorkerRow(row) {
+function removeSubtaskRow(row) {
     row.parentNode.remove()
 }
 
