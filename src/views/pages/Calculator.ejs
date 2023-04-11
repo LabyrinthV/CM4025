@@ -25,7 +25,8 @@
                         <input type="text" id="projectName" name="projectName">
                       <% } %>
                     <div id="subtasks">
-                        <button class="form-controls" onclick="addWorkerRow()">Add Worker(s)</button>
+                        <button class="form-controls" onclick="addSubtaskRow()">Add Subtask(s)</button>
+                        <h3>Subtask 1</h3>
                         <div>
                             <label for="timePeriod">Time & Period:</label>
                             
@@ -87,7 +88,7 @@
         
         <script src="/scripts/CalculatorForm.js"></script>
         <!-- templates -->
-        <%- include('../templates/subtasks.ejs'); %>
+        <%- include('../templates/subtask.ejs'); %>
     </body>
 
 </html>
