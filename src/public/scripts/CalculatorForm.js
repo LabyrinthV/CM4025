@@ -20,9 +20,22 @@ function addSubtaskRow() {
 
     const workerList = document.getElementById("subtasks")
     workerList.appendChild(content)
+    updateSubtaskHeader()
+    
 }
 
 function removeSubtaskRow(row) {
     row.parentNode.remove()
+}
+
+
+function updateSubtaskHeader() {
+    // Get number of items in subtasks class
+    let subtask_count = document.querySelectorAll(".subtask").length
+    let subtask_header = document.querySelectorAll(".subtask-header")
+    console.log(subtask_header.innerHTML)
+    for (var i = 0; i < subtask_count; i++) {
+        subtask_header[i].innerHTML = "Subtask (" + (i+1) + ")"
+    }
 }
 
