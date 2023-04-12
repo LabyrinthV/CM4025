@@ -242,40 +242,41 @@ app.post("/AddUser", express.urlencoded({extended:true}), async function(req, re
 app.post("/AddToQuotes", express.json(), async function(req, res){
     try {
         if (!req.session.loggedin) { return; }
-    let uname = req.session.currentuser;
-    const user = await User.findOne({"username": uname})
-    if (!user) {
-        res.status(401).send('User not found')
-        return;
-    }
-    let totalEstimate = 0;
-    for (let subtask of req.body.subtasks) {
-        let estimate = 0;
-        // let estimate = calculateBudget(subtask);
-        subtask.subquote = estimate;
-        totalEstimate += estimate;
-    }
-    let quoteBody = {
-        quote: totalEstimate,
-        name: req.body.name,
-        subtasks: req.body.subtasks
-    }
+        console.log(req.body)
+        let uname = req.session.currentuser;
+        const user = await User.findOne({"username": uname})
+        if (!user) {
+            res.status(401).send('User not found')
+            return;
+        }
+        let totalEstimate = 0;
+        for (let subtask of req.body.subtasks) {
+            let estimate = 0;
+            // let estimate = calculateBudget(subtask);
+            subtask.subquote = estimate;
+            totalEstimate += estimate;
+        }
+        let quoteBody = {
+            quote: totalEstimate,
+            name: req.body.name,
+            subtasks: req.body.subtasks
+        }
 
-    
+        
 
-    let newQuote = new Quote(quoteBody)
-    await newQuote.save();
-    //let id = new Schema.Types.ObjectId(newQuote._id.toString());
-    let id = newQuote._id;
+        let newQuote = new Quote(quoteBody)
+        await newQuote.save();
+        //let id = new Schema.Types.ObjectId(newQuote._id.toString());
+        let id = newQuote._id;
 
-    if (user.quotes) {
-        user.quotes.push(id);
-        await user.save();
-        console.log("Quote added to user");
-        res.status(200).send('Quote added to user');
-    } else {
-        res.status(500).send('Failed to add quote to user');
-    }
+        if (user.quotes) {
+            user.quotes.push(id);
+            await user.save();
+            console.log("Quote added to user");
+            res.status(200).send('Quote added to user');
+        } else {
+            res.status(500).send('Failed to add quote to user');
+        }
     } catch (error) {
         res.status(500).send('Failed to add quote to user');
     }

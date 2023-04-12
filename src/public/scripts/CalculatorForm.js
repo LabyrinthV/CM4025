@@ -1,28 +1,28 @@
-const formElement = document.getElementById("calculator-form")
+// const formElement = document.getElementById("subtask-form")
 
-formElement.addEventListener("submit", function(e){
-    e.preventDefault()
-    let formData = new URLSearchParams(new FormData(formElement))
+// formElement.addEventListener("submit", function(e){
+//     e.preventDefault()
+//     let formData = new URLSearchParams(new FormData(formElement))
 
-    fetch("/Calculator", {
-        method:"post",
-        body: formData
-    }).then(res=>res.json()).then(res=>{
-        let output = document.getElementById("output")
-        console.log(output)
-        output.innerHTML= new Intl.NumberFormat('en-GB', { style: 'currency', currency: 'GBP' }).format(res.finalBudget)
-    })
-})
+//     fetch("/Calculator", {
+//         method:"post",
+//         body: formData
+//     }).then(res=>res.json()).then(res=>{
+//         let output = document.getElementById("output")
+//         console.log(output)
+//         output.innerHTML= new Intl.NumberFormat('en-GB', { style: 'currency', currency: 'GBP' }).format(res.finalBudget)
+//     })
+// })
 
 const saveButton = document.getElementById("saveQuote")
 
 saveButton.addEventListener("click", function(e){
     e.preventDefault()
-    let formData = new FormData(formElement)
-    console.log(formData.get("time"))
-    let body = {
-        "name": formData.get("projectName"),
-        "subtasks": [{
+    let subtasks = document.querySelectorAll(".subtask-form")
+    let subtaskArray = []
+    for (var i = 0; i < subtasks.length; i++) {
+        let formData = new FormData(subtasks[i])
+        let subtask = {
             "paygrade": formData.get("payGrade"),
             "time": formData.get("time"),
             "period": formData.get("period"),
@@ -32,8 +32,31 @@ saveButton.addEventListener("click", function(e){
                 "frequency": formData.get("frequency"),
             },
             "oneOffCosts": formData.get("oneOffCosts")
-        }]
+        }
+        subtaskArray.push(subtask)
     }
+    let body = {
+        "name": document.getElementById("projectName").value,
+        "subtasks": subtaskArray
+    }
+
+
+    // let formData = new FormData(formElement)
+    // console.log(formData.get("time"))
+    // let body = {
+    //     "name": formData.get("projectName"),
+    //     "subtasks": [{
+    //         "paygrade": formData.get("payGrade"),
+    //         "time": formData.get("time"),
+    //         "period": formData.get("period"),
+    //         "payGradeAmount": formData.get("payGradeAmount"),
+    //         "ongoingCosts": {
+    //             "ongoingCostsAmount": formData.get("ongoingAmount"),
+    //             "frequency": formData.get("frequency"),
+    //         },
+    //         "oneOffCosts": formData.get("oneOffCosts")
+    //     }]
+    // }
     fetch("/AddToQuotes", {
         method:"post",
         body: JSON.stringify(body),
