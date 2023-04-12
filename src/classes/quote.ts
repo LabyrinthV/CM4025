@@ -9,9 +9,9 @@ const quoteSchema = new Schema({
         paygrade: { type: String, required: true},
         time: { type: Number, required: true},
         period: { type: String, required: true},
-        amount: { type: Number, required: true},
+        payGradeAmount: { type: Number, required: true},
         ongoingCosts: { 
-            amount: { type: Number, required: true},
+            ongoingCostsAmount: { type: Number, required: true},
             frequency: { type: String, required: true},
         },
         oneOffCosts: { type: Number, required: true}

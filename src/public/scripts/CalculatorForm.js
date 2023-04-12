@@ -25,9 +25,9 @@ saveButton.addEventListener("click", function(e){
             "paygrade": formData.get("payGrade"),
             "time": formData.get("time"),
             "period": formData.get("period"),
-            "amount": formData.get("payGradeAmount"),
+            "payGradeAmount": formData.get("payGradeAmount"),
             "ongoingCosts": {
-                "amount": formData.get("ongoingAmount"),
+                "ongoingCostsAmount": formData.get("ongoingAmount"),
                 "frequency": formData.get("frequency"),
             },
             "oneOffCosts": formData.get("oneOffCosts")
@@ -64,9 +64,8 @@ function updateSubtaskHeader() {
     // Get number of items in subtasks class
     let subtask_count = document.querySelectorAll(".subtask").length
     let subtask_header = document.querySelectorAll(".subtask-header")
-    console.log(subtask_header.innerHTML)
     for (var i = 0; i < subtask_count; i++) {
-        subtask_header[i].innerHTML = "Subtask (" + (i+1) + ")"
+        subtask_header[i].innerHTML = "Subtask " + (i+1) 
     }
 }
 

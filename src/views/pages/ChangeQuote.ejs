@@ -23,15 +23,15 @@
                         <input type="text" id="projectName" name="projectName" value=<%= quote.name %>>
                       <% } %>
                     <div id="subtasks">
-                        <button class="form-controls" onclick="addSubtaskRow()">Add Subtask(s)</button>
+                        <button class="form-controls" onclick="addSubtaskRow()" type="button">Add Subtask(s)</button>
                         <% quote.subtasks.forEach((subtask, index) => { %>               
-                            <h3>Subtask <%= index + 1 %></h3>
-                            <div>
+                            <h3 class="subtask-header">Subtask <%= index + 1 %></h3>
+                            <div class="subtask">
                                 <label for="timePeriod">Time & Period:</label>
                                 
                                 <div class="form-controls">
-                                    <input type="number" id="time" name="time">
-                                    <select id="period" name="period">
+                                    <input type="number" id="time" name="time" value=<%=subtask.time %>>
+                                    <select id="period" name="period" >
                                         <option value="hour">Hours</option>
                                         <option value="day">Days</option>
                                         <option value="month">Months</option>
@@ -44,11 +44,11 @@
                                         <option value="junior">Junior</option>
                                         <option value="senior">Senior</option>
                                     </select>
-                                    <input type="number" id="payGradeAmount" name="payGradeAmount">
+                                    <input type="number" id="payGradeAmount" name="payGradeAmount" value=<%=subtask.payGradeAmount %>>
                                 </div>
                                 <label for="ongoingAmount">Ongoing Costs:</label>
                                 <div class="form-controls">
-                                    <input type="number" id="ongoingAmount" name="ongoingAmount">
+                                    <input type="number" id="ongoingAmount" name="ongoingAmount" value=<%=subtask.ongoingCosts.amount %>>
                                     <select id="ongoingCost" name="frequency">
                                         <option value="week">Weekly</option>
                                         <option value="month">Monthly</option>
@@ -57,7 +57,7 @@
                                 </div>
                                 <label for="oneOffCosts">One-off Costs:</label>
                                 <div class="form-controls">
-                                    <input type="number" id="oneOffCosts" name="oneOffCosts">
+                                    <input type="number" id="oneOffCosts" name="oneOffCosts" value=<%=subtask.oneOffCosts %>>
                                 </div>
                             </div>
                         <% }) %>     
