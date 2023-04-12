@@ -5,6 +5,7 @@
     <head>
 
         <%- include('../partials/head'); %>
+        <script src="/scripts/Account.js"></script>
         <title>Account</title>
 
     </head>
@@ -27,6 +28,7 @@
                         <li>
                             <p><%= quote.name %></p>
                             <p><a href="/ChangeQuote/<%=quote._id%>">Edit</a></p>
+                            <button type="button" onclick= <%="deleteQuote('" + quote._id + "')" %> >Delete Quote</button>
                         </li>
                     <% } %>    
                 </ul>    

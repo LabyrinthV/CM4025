@@ -49,7 +49,8 @@ app.get("/SignIn", function(req, res){
 });
 
 app.get('/LogOut', function(req, res){
-    req.session.loggedin = false;
+    try {
+        req.session.loggedin = false;
     req.session.destroy(function(err) {
         if(err) {
             console.log(err);
@@ -58,6 +59,9 @@ app.get('/LogOut', function(req, res){
             res.redirect('/');
         }
     });
+    } catch (error) {
+        res.status(500).send('Something broke!');
+    }
 });
 
 app.get("/SignUp", function(req, res){
@@ -66,51 +70,85 @@ app.get("/SignUp", function(req, res){
 
 //Account route
 app.get('/Account', async function(req, res){
-    let loggedin = req.session.loggedin;
-    //if the user is not logged in redirect them to the login page
-    if(req.session) {
+    try {
+        let loggedin = req.session.loggedin;
+        //if the user is not logged in redirect them to the login page
+        if(req.session) {
 
-        if(!req.session.currentuser){res.redirect('/SignIn');return;}
+            if(!req.session.currentuser){res.redirect('/SignIn');return;}
 
-        let uname = req.session.currentuser;
+            let uname = req.session.currentuser;
  
-        //Find user from database and let express return the result
+            //Find user from database and let express return the result
 
-        const user = await User.findOne({"username": uname})
-        if (!user) {
-            res.status(401).send('User not found')
+            const user = await User.findOne({"username": uname})
+            if (!user) {
+                res.status(401).send('User not found')
+            }
+            await user?.populate('quotes')
+            res.render('pages/Account', {            
+                user,
+                loggedin
+            })
         }
-        await user?.populate('quotes')
-        res.render('pages/Account', {            
-            user,
-            loggedin
-        })
+    } catch (error) {
+        res.status(500).send('Something broke!');
     }
 });
 
 app.get('/ChangeQuote/:id', async function(req, res){
-    let loggedin = req.session.loggedin;
+    try {
+        let loggedin = req.session.loggedin;
     //if the user is not logged in redirect them to the login page
-    if(req.session) {
+        if(req.session) {
 
-        if(!req.session.currentuser){res.redirect('/SignIn');return;}
+            if(!req.session.currentuser){res.redirect('/SignIn');return;}
 
-        let uname = req.session.currentuser;
+            let uname = req.session.currentuser;
 
-        //Find user from database and let express return the result
-        const user = await User.findOne({"username": uname})
-        if (!user) {
-            res.status(401).send('User not found')
+            //Find user from database and let express return the result
+            const user = await User.findOne({"username": uname})
+            if (!user) {
+                res.status(401).send('User not found')
+            }
+
+            let quote = await Quote.findById(req.params.id)
+            if (!quote) {
+                res.status(401).send('Quote not found')
+            }
+            console.log(quote  )
+            res.render('pages/ChangeQuote', {
+                quote,
+                loggedin
+            })
         }
+    } catch (error) {
+        res.status(500).send('Something broke!');
+    }
+});
 
-        let quote = await Quote.findById(req.params.id)
-        if (!quote) {
-            res.status(401).send('Quote not found')
-        }
-        res.render('pages/ChangeQuote', {
-            quote,
-            loggedin
-        })
+app.get('/DeleteQuote/:id', async function(req, res){
+    try {
+        let loggedin = req.session.loggedin;
+    //if the user is not logged in redirect them to the login page
+        if(req.session) {
+
+            if(!req.session.currentuser){res.redirect('/SignIn');return;}
+
+            let uname = req.session.currentuser;
+
+            //Find user from database and let express return the result
+            const user = await User.findOne({"username": uname})
+            if (!user) {
+                res.status(401).send('User not found')
+            }
+            //Delete quote from database
+            await Quote.findByIdAndDelete(req.params.id)
+            res.status(200)
+
+        }    
+    } catch (error) {
+        res.status(500).send('Could not delete quote');
     }
 });
 
@@ -202,7 +240,8 @@ app.post("/AddUser", express.urlencoded({extended:true}), async function(req, re
 });
 
 app.post("/AddToQuotes", express.json(), async function(req, res){
-    if (!req.session.loggedin) { return; }
+    try {
+        if (!req.session.loggedin) { return; }
     let uname = req.session.currentuser;
     const user = await User.findOne({"username": uname})
     if (!user) {
@@ -235,6 +274,9 @@ app.post("/AddToQuotes", express.json(), async function(req, res){
         console.log("Quote added to user");
         res.status(200).send('Quote added to user');
     } else {
+        res.status(500).send('Failed to add quote to user');
+    }
+    } catch (error) {
         res.status(500).send('Failed to add quote to user');
     }
 });

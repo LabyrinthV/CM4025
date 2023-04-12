@@ -19,6 +19,7 @@ const saveButton = document.getElementById("saveQuote")
 saveButton.addEventListener("click", function(e){
     e.preventDefault()
     let formData = new FormData(formElement)
+    console.log(formData.get("time"))
     let body = {
         "name": formData.get("projectName"),
         "subtasks": [{
