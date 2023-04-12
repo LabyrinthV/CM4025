@@ -80,6 +80,8 @@ app.get('/Account', async function(req, res){
         if (!user) {
             res.status(401).send('User not found')
         }
+        await user?.populate('quotes')
+
         res.render('pages/Account', {            
             user
         })
@@ -103,33 +105,33 @@ function parseNumberArray(incomingData: string | string[], targetArray: number[]
 
 
 
-app.post("/Calculator", express.urlencoded({extended:true}), function(req, res){
-    console.log(req.body)
+// app.post("/Calculator", express.urlencoded({extended:true}), function(req, res){
+//     console.log(req.body)
 
-    const formData:subtaskForm = {
+//     const formData:subtaskForm = {
 
-        ongoingCosts: parseInt(req.body.ongoingCosts),
-        oneOffCost: parseInt(req.body.oneOffCost),
-        frequency: req.body.frequency,
-        time: [],
-        period: [],
-        payGrade: [],
-        payGradeAmount: []
-    }
+//         ongoingCosts: parseInt(req.body.ongoingCosts),
+//         oneOffCost: parseInt(req.body.oneOffCost),
+//         frequency: req.body.frequency,
+//         time: [],
+//         period: [],
+//         payGrade: [],
+//         payGradeAmount: []
+//     }
 
-    parseNumberArray(req.body.time, formData.time)
-    parseNumberArray(req.body.payGradeAmount, formData.payGradeAmount)
+//     parseNumberArray(req.body.time, formData.time)
+//     parseNumberArray(req.body.payGradeAmount, formData.payGradeAmount)
 
-    if(typeof req.body.payGrade === "string") {
-        formData.payGrade.push(req.body.payGrade)
-    } else {
-        formData.payGrade = req.body.payGrade
-    }
-    if (typeof req.body.period === "string") {
-        formData.period.push(req.body.period)
-    } else {
-        formData.period = req.body.period
-    }
+//     if(typeof req.body.payGrade === "string") {
+//         formData.payGrade.push(req.body.payGrade)
+//     } else {
+//         formData.payGrade = req.body.payGrade
+//     }
+//     if (typeof req.body.period === "string") {
+//         formData.period.push(req.body.period)
+//     } else {
+//         formData.period = req.body.period
+//     }
 
 
     // let finalBudget = calculateBudget(formData)
@@ -137,19 +139,25 @@ app.post("/Calculator", express.urlencoded({extended:true}), function(req, res){
     // res.json({
     //     finalBudget
     // });
-    console.log(formData)
-    res.json({})
-})
+//     console.log(formData)
+//     res.json({})
+// })
 
 app.post("/Login", express.urlencoded({extended:true}), async function(req, res){
     let uname = req.body.username;
     let pword = req.body.password;
 
-    const user = await User.findOne({username: uname, password: pword})
+    const user = await User.findOne({username: uname})
     if (!user) {
         res.status(401).send('User not found')
         return;
     }
+    if (!user.authenticate(req.body.password)) {
+        return res.status(401).send({
+          error: "Username and Password don't match."
+        })
+    }
+
     req.session.loggedin = true;
     req.session.currentuser = uname;
     res.redirect('/');
@@ -194,8 +202,9 @@ app.post("/AddToQuotes", express.json(), async function(req, res){
 
     let newQuote = new Quote(quoteBody)
     await newQuote.save();
-    let id = new Schema.Types.ObjectId(newQuote._id.toString());
-    
+    //let id = new Schema.Types.ObjectId(newQuote._id.toString());
+    let id = newQuote._id;
+
     if (user.quotes) {
         user.quotes.push(id);
         await user.save();
@@ -204,7 +213,6 @@ app.post("/AddToQuotes", express.json(), async function(req, res){
     } else {
         res.status(500).send('Failed to add quote to user');
     }
-
 });
 
 

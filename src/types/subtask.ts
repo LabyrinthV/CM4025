@@ -3,7 +3,7 @@ export type subtaskForm = {
         amount: number,
         frequency: string
     },
-    oneOffCost: number,
+    oneOffCosts: number,
     time: number,
     period: string,
     payGrade: string,

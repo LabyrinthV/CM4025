@@ -14,7 +14,7 @@ const quoteSchema = new Schema({
             amount: { type: Number, required: true},
             frequency: { type: String, required: true},
         },
-        oneOffCost: { type: Number, required: true}
+        oneOffCosts: { type: Number, required: true}
     }],
 });
 

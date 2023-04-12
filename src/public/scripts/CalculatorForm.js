@@ -35,7 +35,7 @@ saveButton.addEventListener("click", function(e){
     }
     fetch("/AddToQuotes", {
         method:"post",
-        body: body,
+        body: JSON.stringify(body),
         headers: {
             'Content-Type': 'application/json'
         }

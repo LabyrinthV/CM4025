@@ -1,4 +1,4 @@
-import { model, Schema, Model} from "mongoose";
+import { model, Schema, Model, Types} from "mongoose";
 import crypto from "crypto";
 
 interface IUser {
@@ -9,7 +9,7 @@ interface IUser {
     hashed_password: string;
     salt: string;
     admin: boolean;
-    quotes: Schema.Types.ObjectId[];
+    quotes: Types.ObjectId[];
 }
   
   // Put all user instance methods in this interface:
