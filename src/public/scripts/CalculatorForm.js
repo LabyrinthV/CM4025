@@ -14,6 +14,20 @@ formElement.addEventListener("submit", function(e){
     })
 })
 
+const saveButton = document.getElementById("saveQuote")
+
+saveButton.addEventListener("click", function(e){
+    e.preventDefault()
+    let formData = new URLSearchParams(new FormData(formElement))
+    fetch("/AddToQuotes", {
+        method:"post",
+        body: formData
+    }).then(res=>res.json()).then(res=>{
+        console.log(res)
+    })
+})
+
+
 function addSubtaskRow() {
     const template = document.getElementById("subtask-template")
     const content = template.content.cloneNode(true)
