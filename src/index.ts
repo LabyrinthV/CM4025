@@ -81,7 +81,6 @@ app.get('/Account', async function(req, res){
             res.status(401).send('User not found')
         }
         await user?.populate('quotes')
-
         res.render('pages/Account', {            
             user
         })

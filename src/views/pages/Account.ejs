@@ -23,7 +23,11 @@
                 <h1 class="intro">My Account</h1>
                 <h2 id="quotemsg">Here are your quotes:</h2>
                 <ul>
-
+                    <% for (let quote of user.quotes) { %>
+                        <li>
+                            <p><%= quote.name %></p>
+                        </li>
+                    <% } %>    
                 </ul>    
             </div>
         </main>
