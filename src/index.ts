@@ -169,7 +169,7 @@ app.post("/AddUser", express.urlencoded({extended:true}), async function(req, re
     res.redirect('/Account');
 });
 
-app.post("/AddToQuotes", express.urlencoded({extended:true}), async function(req, res){
+app.post("/AddToQuotes", express.json(), async function(req, res){
     if (!req.session.loggedin) { return; }
     let uname = req.session.currentuser;
     const user = await User.findOne({"username": uname})

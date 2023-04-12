@@ -18,10 +18,27 @@ const saveButton = document.getElementById("saveQuote")
 
 saveButton.addEventListener("click", function(e){
     e.preventDefault()
-    let formData = new URLSearchParams(new FormData(formElement))
+    let formData = new FormData(formElement)
+    let body = {
+        "name": formData.get("projectName"),
+        "subtasks": [{
+            "paygrade": formData.get("payGrade"),
+            "time": formData.get("time"),
+            "period": formData.get("period"),
+            "amount": formData.get("payGradeAmount"),
+            "ongoingCosts": {
+                "amount": formData.get("ongoingAmount"),
+                "frequency": formData.get("frequency"),
+            },
+            "oneOffCosts": formData.get("oneOffCosts")
+        }]
+    }
     fetch("/AddToQuotes", {
         method:"post",
-        body: formData
+        body: body,
+        headers: {
+            'Content-Type': 'application/json'
+        }
     }).then(res=>res.json()).then(res=>{
         console.log(res)
     })
