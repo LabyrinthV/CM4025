@@ -2,11 +2,11 @@ import "dotenv/config"
 import express from "express"
 import express_session from "express-session"
 import path from "node:path"
-import mongoose from 'mongoose';
+import mongoose, { Schema } from 'mongoose';
 import User from "./classes/User";
 import Quote from "./classes/Quote";
 import { calculateBudget } from "./classes/calculator";
-import { calculatorForm } from "./types/CalculatorForm";
+import { subtaskForm } from "./types/subtask";
 
 declare module "express-session" {
     interface SessionData {
@@ -106,7 +106,7 @@ function parseNumberArray(incomingData: string | string[], targetArray: number[]
 app.post("/Calculator", express.urlencoded({extended:true}), function(req, res){
     console.log(req.body)
 
-    const formData:calculatorForm = {
+    const formData:subtaskForm = {
 
         ongoingCosts: parseInt(req.body.ongoingCosts),
         oneOffCost: parseInt(req.body.oneOffCost),
@@ -177,11 +177,27 @@ app.post("/AddToQuotes", express.json(), async function(req, res){
         res.status(401).send('User not found')
         return;
     }
-    let quote = req.body.quote;
+    let totalEstimate = 0;
+    for (let subtask of req.body.subtasks) {
+        let estimate = 0;
+        // let estimate = calculateBudget(subtask);
+        subtask.subquote = estimate;
+        totalEstimate += estimate;
+    }
+    let quoteBody = {
+        quote: totalEstimate,
+        name: req.body.name,
+        subtasks: req.body.subtasks
+    }
 
-    await new Quote(quote).save()
+    
+
+    let newQuote = new Quote(quoteBody)
+    await newQuote.save();
+    let id = new Schema.Types.ObjectId(newQuote._id.toString());
+    
     if (user.quotes) {
-        user.quotes.push(quote._id);
+        user.quotes.push(id);
         await user.save();
         console.log("Quote added to user");
         res.status(200).send('Quote added to user');
