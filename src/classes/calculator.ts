@@ -1,5 +1,5 @@
 import { time } from "console";
-import { calculatorForm } from "../types/CalculatorForm";
+import { subtaskForm } from "../types/subtask";
 
 interface Budget
 {
@@ -30,7 +30,7 @@ const payGrades = {
 
   
   // Function to calculate final budget figure
-  export function calculateBudget(options:calculatorForm) {
+  export function calculateBudget(options:subtaskForm) {
     let personelCost = 0
     let maxWorkHours = 0
 
