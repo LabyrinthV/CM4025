@@ -55,7 +55,7 @@ app.get('/LogOut', function(req, res){
             console.log(err);
         } else {
             console.log("Logged out successfully.");
-            res.redirect('/Calculator');
+            res.redirect('/');
         }
     });
 });
@@ -66,7 +66,7 @@ app.get("/SignUp", function(req, res){
 
 //Account route
 app.get('/Account', async function(req, res){
-
+    let loggedin = req.session.loggedin;
     //if the user is not logged in redirect them to the login page
     if(req.session) {
 
@@ -82,11 +82,36 @@ app.get('/Account', async function(req, res){
         }
         await user?.populate('quotes')
         res.render('pages/Account', {            
-            user
+            user,
+            loggedin
         })
     }
+});
 
-    
+app.get('/ChangeQuote/:id', async function(req, res){
+    let loggedin = req.session.loggedin;
+    //if the user is not logged in redirect them to the login page
+    if(req.session) {
+
+        if(!req.session.currentuser){res.redirect('/SignIn');return;}
+
+        let uname = req.session.currentuser;
+
+        //Find user from database and let express return the result
+        const user = await User.findOne({"username": uname})
+        if (!user) {
+            res.status(401).send('User not found')
+        }
+
+        let quote = await Quote.findById(req.params.id)
+        if (!quote) {
+            res.status(401).send('Quote not found')
+        }
+        res.render('pages/ChangeQuote', {
+            quote,
+            loggedin
+        })
+    }
 });
 
 // Post routes

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+    <head>
+
+        <%- include('../partials/head'); %>
+        <title>Account</title>
+
+    </head>
+
+    <body id="ChangeQuote">
+        <div class="nav-container">
+            <%- include('../partials/nav'); %>
+        </div>
+
+        <main id="quote-change-page">
+            <div class="formcontainer">
+                <h1 class="intro">Change quotes</h1>
+                <form id="calculator-form" action="" method="post">
+                    <% if (locals.loggedin) { %>
+                        <label for="projectName">Project Name:</label>
+                        <input type="text" id="projectName" name="projectName" value=<%= quote.name %>>
+                      <% } %>
+                    <div id="subtasks">
+                        <button class="form-controls" onclick="addSubtaskRow()">Add Subtask(s)</button>
+                        <% quote.subtasks.forEach((subtask, index) => { %>               
+                            <h3>Subtask <%= index + 1 %></h3>
+                            <div>
+                                <label for="timePeriod">Time & Period:</label>
+                                
+                                <div class="form-controls">
+                                    <input type="number" id="time" name="time">
+                                    <select id="period" name="period">
+                                        <option value="hour">Hours</option>
+                                        <option value="day">Days</option>
+                                        <option value="month">Months</option>
+                                    </select>
+                                </div>
+                                <label for="payGrade">Pay Grade:</label>
+                                <div class="form-controls">
+                                    <select name="payGrade" id="payGrade">
+                                        <option value="standard">Standard</option>
+                                        <option value="junior">Junior</option>
+                                        <option value="senior">Senior</option>
+                                    </select>
+                                    <input type="number" id="payGradeAmount" name="payGradeAmount">
+                                </div>
+                                <label for="ongoingAmount">Ongoing Costs:</label>
+                                <div class="form-controls">
+                                    <input type="number" id="ongoingAmount" name="ongoingAmount">
+                                    <select id="ongoingCost" name="frequency">
+                                        <option value="week">Weekly</option>
+                                        <option value="month">Monthly</option>
+                                        <option value="year">Annual</option>
+                                    </select>
+                                </div>
+                                <label for="oneOffCosts">One-off Costs:</label>
+                                <div class="form-controls">
+                                    <input type="number" id="oneOffCosts" name="oneOffCosts">
+                                </div>
+                            </div>
+                        <% }) %>     
+                    </div>
+
+                    <div class="form-controls">
+                        <button>Calculate Quote</button>
+                    </div>
+                  </form>
+                  <div id="output"></div>
+                  <div class="form-controls">
+                    <% if (locals.loggedin) { %>
+                      <button id="saveQuote">Save Quote</button>
+                    <% } %>
+                  </div>
+
+            </div>
+        </main>
+
+        <script src="/scripts/CalculatorForm.js"></script>
+        <!-- templates -->
+        <%- include('../templates/subtask.ejs'); %>
+    </body>

@@ -26,6 +26,7 @@
                     <% for (let quote of user.quotes) { %>
                         <li>
                             <p><%= quote.name %></p>
+                            <p><a href="/ChangeQuote/<%=quote._id%>">Edit</a></p>
                         </li>
                     <% } %>    
                 </ul>    
