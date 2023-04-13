@@ -5,6 +5,7 @@ import path from "node:path"
 import mongoose, { Schema } from 'mongoose';
 import User from "./classes/User";
 import Quote from "./classes/Quote";
+import HourlyRate from "./classes/HourlyRate";
 import { calculateBudget } from "./classes/calculator";
 import { subtaskForm } from "./types/subtask";
 
@@ -279,10 +280,35 @@ app.post("/UpdateQuote", express.json(), async function(req, res){
     }
 });
 
+async function createRateDatabase() {
+    let rates = [{
+        paygrade: "standard",
+        rate: 20
+    },
+    {
+        paygrade: "senior",
+        rate: 30
+    }, {
+        paygrade: "junior",
+        rate: 10
+    }]
+    const rate = new HourlyRate(rates);
 
+    try {
+        const checkIfExists = (await HourlyRate.find({ paygrade: {$exists: true} })).length;
+        if(checkIfExists === 0) {
+            await rate.save();
+            console.log("Created rate database");
+        }
+    } catch (error) {
+        console.error(error)
+    }
+
+}
 
 mongoose.set('strictQuery', false);
 mongoose.connect(process.env.mongourl || "").then(() => {
+    //createRateDatabase();
     console.log("Mongo Connected")
     app.listen(8080);
 })
