@@ -1,6 +1,6 @@
 export type subtaskForm = {
     ongoingCosts: {
-        amount: number,
+        ongoingCostsAmount: number,
         frequency: string
     },
     oneOffCosts: number,

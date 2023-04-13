@@ -167,43 +167,48 @@ function parseNumberArray(incomingData: string | string[], targetArray: number[]
 
 
 
-// app.post("/Calculator", express.urlencoded({extended:true}), function(req, res){
-//     console.log(req.body)
+app.post("/Calculator", express.urlencoded({extended:true}), function(req, res){
+    try {
+        console.log(req.body)
 
-//     const formData:subtaskForm = {
-
-//         ongoingCosts: parseInt(req.body.ongoingCosts),
-//         oneOffCost: parseInt(req.body.oneOffCost),
-//         frequency: req.body.frequency,
-//         time: [],
-//         period: [],
-//         payGrade: [],
-//         payGradeAmount: []
-//     }
-
-//     parseNumberArray(req.body.time, formData.time)
-//     parseNumberArray(req.body.payGradeAmount, formData.payGradeAmount)
-
-//     if(typeof req.body.payGrade === "string") {
-//         formData.payGrade.push(req.body.payGrade)
-//     } else {
-//         formData.payGrade = req.body.payGrade
-//     }
-//     if (typeof req.body.period === "string") {
-//         formData.period.push(req.body.period)
-//     } else {
-//         formData.period = req.body.period
-//     }
-
-
-    // let finalBudget = calculateBudget(formData)
-
-    // res.json({
-    //     finalBudget
-    // });
-//     console.log(formData)
-//     res.json({})
-// })
+        const formData:subtaskForm = {
+            ongoingCosts: {
+                ongoingCostsAmount: parseInt(req.body.ongoingCostsAmount),
+                frequency: req.body.frequency,
+            },
+            oneOffCosts: parseInt(req.body.oneOffCost),
+            time: parseInt(req.body.time),
+            period: req.body.period,
+            payGrade: req.body.payGrade,
+            payGradeAmount: parseInt(req.body.payGradeAmount)
+        }
+    
+        // parseNumberArray(req.body.time, formData.time)
+        // parseNumberArray(req.body.payGradeAmount, formData.payGradeAmount)
+    
+        // if(typeof req.body.payGrade === "string") {
+        //     formData.payGrade.push(req.body.payGrade)
+        // } else {
+        //     formData.payGrade = req.body.payGrade
+        // }
+        // if (typeof req.body.period === "string") {
+        //     formData.period.push(req.body.period)
+        // } else {
+        //     formData.period = req.body.period
+        // }
+    
+    
+        let finalBudget = calculateBudget(formData)
+    
+        res.json({
+            finalBudget
+        });
+        console.log(formData)
+        res.json({})
+    } catch (error) {
+        
+    }
+})
 
 app.post("/Login", express.urlencoded({extended:true}), async function(req, res){
     let uname = req.body.username;

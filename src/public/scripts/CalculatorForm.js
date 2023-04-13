@@ -1,18 +1,20 @@
-// const formElement = document.getElementById("subtask-form")
+const formElements = document.querySelectorAll(".subtask")
 
-// formElement.addEventListener("submit", function(e){
-//     e.preventDefault()
-//     let formData = new URLSearchParams(new FormData(formElement))
+formElements.addEventListener("submit", function(e){
+    e.preventDefault()
+    for (subtask in formElements) {
+        let formData = new URLSearchParams(new FormData(subtask))
 
-//     fetch("/Calculator", {
-//         method:"post",
-//         body: formData
-//     }).then(res=>res.json()).then(res=>{
-//         let output = document.getElementById("output")
-//         console.log(output)
-//         output.innerHTML= new Intl.NumberFormat('en-GB', { style: 'currency', currency: 'GBP' }).format(res.finalBudget)
-//     })
-// })
+        fetch("/Calculator", {
+            method:"post",
+            body: formData
+        }).then(res=>res.json()).then(res=>{
+            let output = document.getElementById("output")
+            console.log(output)
+            output.innerHTML= new Intl.NumberFormat('en-GB', { style: 'currency', currency: 'GBP' }).format(res.finalBudget)
+        })
+    }
+})
 
 const saveButton = document.getElementById("saveQuote")
 
