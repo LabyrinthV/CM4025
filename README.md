@@ -7,6 +7,4 @@ If the user is an admin they can calculate the quote without a fudge factor
 
 The application has fulfilled the Must, Should and Could requirements. But has not completely fulfilled the Would requirements. The admin can calculate a quote without a fudge factor but the user cannot. And subtasks have been implemented but the ability to see the intermediate calculations has not been implemented.
 
-To run this application you will need to install this repository and run the following commands in the directory of your repository:
-
-npm install
+To run this application you will need to install this repository and run the the startup script. This will install all the dependencies and run the application.
