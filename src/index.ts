@@ -9,6 +9,7 @@ import HourlyRate from "./classes/HourlyRate";
 import { calculateBudget } from "./classes/calculator";
 import { subtaskForm } from "./types/subtask";
 
+// Create express session interface
 declare module "express-session" {
     interface SessionData {
         user: string;
@@ -21,7 +22,7 @@ declare module "express-session" {
 const url = process.env.mongourl ?? ""
 
 
-
+//Setup server
 const app = express();
 
 app.use(express_session({secret:'session',
@@ -51,6 +52,7 @@ app.get("/SignIn", function(req, res){
     res.render('pages/SignIn');
 });
 
+//Logout route
 app.get('/LogOut', function(req, res){
     try {
         req.session.loggedin = false;
@@ -67,6 +69,7 @@ app.get('/LogOut', function(req, res){
     }
 });
 
+//Sign up route
 app.get("/SignUp", function(req, res){
     res.render('pages/SignUp');
 });
@@ -158,12 +161,13 @@ app.get('/DeleteQuote/:id', async function(req, res){
 
 // Post routes
 
-
+//Calulator route
 app.post("/Calculator", express.json(), function(req, res){
     try {
         let admin = req.session.admin ?? false;
         console.log(req.body)
-    
+        
+        //Calculate quote
         let subtaskquote = calculateBudget(req.body as subtaskForm)
         console.log(subtaskquote)
         res.json({
@@ -173,10 +177,9 @@ app.post("/Calculator", express.json(), function(req, res){
         console.error(error)
     }
 })
-
+// Login route
 app.post("/Login", express.urlencoded({extended:true}), async function(req, res){
     let uname = req.body.username;
-    let pword = req.body.password;
 
     const user = await User.findOne({username: uname})
     if (!user) {
@@ -188,7 +191,7 @@ app.post("/Login", express.urlencoded({extended:true}), async function(req, res)
           error: "Username and Password don't match."
         })
     }
-
+    //Set session variables
     req.session.loggedin = true;
     req.session.currentuser = uname;
     req.session.admin = user.admin;
@@ -209,6 +212,7 @@ app.post("/AddUser", express.urlencoded({extended:true}), async function(req, re
     res.redirect('/Account');
 });
 
+//Add quote to user
 app.post("/AddToQuotes", express.json(), async function(req, res){
     try {
         if (!req.session.loggedin) { return; }
@@ -253,6 +257,7 @@ app.post("/AddToQuotes", express.json(), async function(req, res){
     }
 });
 
+//Update quote
 app.post("/UpdateQuote", express.json(), async function(req, res){
     try {
         if (!req.session.loggedin) { return; }
@@ -306,6 +311,7 @@ async function createRateDatabase() {
 
 }
 
+//Database connection
 mongoose.set('strictQuery', false);
 mongoose.connect(process.env.mongourl || "").then(() => {
     //createRateDatabase();

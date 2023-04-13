@@ -7,6 +7,8 @@ calculateQuoteButton.addEventListener("click", function(e){
     calculateQuote()
 })
 
+
+// Calculate the quote, iterate through each subtask and add the cost to the total
 async function calculateQuote() {
     
     const formElements = document.getElementsByClassName("subtask-form")
@@ -28,6 +30,8 @@ async function calculateQuote() {
         output.innerHTML= new Intl.NumberFormat('en-GB', { style: 'currency', currency: 'GBP' })
         .format(total)
 }
+
+// Calculate the cost of a subtask
 
 async function calculateSubtask(subtask, fudgeCheckmark) {
     let formData = new FormData(subtask)
@@ -55,7 +59,7 @@ async function calculateSubtask(subtask, fudgeCheckmark) {
     })
 }
 
-
+// Save the quote to the database
 const saveButton = document.getElementById("saveQuote")
 if (saveButton) {
     const fudgeCheckmark = document.getElementById("fudgeCheckmark")
@@ -103,15 +107,16 @@ if (saveButton) {
     })
 }
 
-
+// Update the quote in the database
 const updateButton = document.getElementById("updateQuote")
 if (updateButton) {
     const fudgeCheckmark = document.getElementById("fudgeCheckmark")
     let checked = true
-
+    // Check for fudge checkmark
     if (fudgeCheckmark) {
         checked = fudgeCheckmark.checked
     }
+    // Add event listener to update button
     updateButton.addEventListener("click", function(e){
         e.preventDefault()
         let subtasks = document.querySelectorAll(".subtask-form")
@@ -153,7 +158,7 @@ if (updateButton) {
     })
 }
 
-
+// Add a new subtask row
 function addSubtaskRow() {
     const template = document.getElementById("subtask-template")
     const content = template.content.cloneNode(true)
