@@ -8,6 +8,20 @@ calculateQuoteButton.addEventListener("click", function(e){
 })
 
 
+// const originalForm = document.querySelector(".subtask-form")
+// const originalSubQuote = form.querySelector(".subtaskQuote")
+
+// if (originalSubQuote) {
+//     originalSubQuote.addEventListener("click", async function(e){
+//         console.log("clicked")
+//         const cost = await calculateSubtask(form)
+//         const output = content.querySelector(".subtaskOutput")
+//         output.innerHTML= new Intl.NumberFormat('en-GB', { style: 'currency', currency: 'GBP' })
+//         .format(cost)
+//     })
+// }
+
+
 // Calculate the quote, iterate through each subtask and add the cost to the total
 async function calculateQuote() {
     
@@ -166,9 +180,11 @@ function addSubtaskRow() {
     const workerList = document.getElementById("subtasks")
     workerList.appendChild(content)
 
-    const form = content.querySelector(".subtask-form")
-    const calculateSubtaskButton = content.querySelector(".subtaskQuote")
+    const form = workerList.lastElementChild
+    const calculateSubtaskButton = form.querySelector(".subtaskQuote")
+    console.log(content.firstElementChild)
     calculateSubtaskButton.addEventListener("click", async function(e){
+        console.log("clicked")
         const cost = await calculateSubtask(form)
         const output = content.querySelector(".subtaskOutput")
         output.innerHTML= new Intl.NumberFormat('en-GB', { style: 'currency', currency: 'GBP' })
