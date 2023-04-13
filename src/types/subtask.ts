@@ -6,6 +6,7 @@ export type subtaskForm = {
     oneOffCosts: number,
     time: number,
     period: string,
-    payGrade: string,
-    payGradeAmount: number
+    paygrade: string,
+    payGradeAmount: number,
+    fudgeCheckmark: boolean
 }

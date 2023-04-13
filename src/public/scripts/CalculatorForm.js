@@ -1,17 +1,26 @@
+// Description: This file contains the javascript for the calculator form
+
+// This function is called when the user clicks the calculate quote button
 const calculateQuoteButton = document.getElementById("calculateQuote")
 
 calculateQuoteButton.addEventListener("click", function(e){
     calculateQuote()
 })
 
-
 async function calculateQuote() {
     
     const formElements = document.getElementsByClassName("subtask-form")
+    const fudgeCheckmark = document.getElementById("fudgeCheckmark")
+    let checked = true
+
+    if (fudgeCheckmark) {
+        checked = fudgeCheckmark.checked
+    }
+
     let total = 0
     for (let formElement of formElements) {
         
-        let cost = await calculateSubtask(formElement)
+        let cost = await calculateSubtask(formElement, checked)
         console.log(cost)
         total += cost
     }
@@ -20,19 +29,20 @@ async function calculateQuote() {
         .format(total)
 }
 
-async function calculateSubtask(subtask) {
+async function calculateSubtask(subtask, fudgeCheckmark) {
     let formData = new FormData(subtask)
 
     let body = {
-        "paygrade": formData.get("payGrade"),
-        "time": formData.get("time"),
+        "paygrade": formData.get("paygrade"),
+        "time": parseInt(formData.get("time")),
         "period": formData.get("period"),
-        "payGradeAmount": formData.get("payGradeAmount"),
+        "payGradeAmount": parseInt(formData.get("payGradeAmount")),
         "ongoingCosts": {
-            "ongoingCostsAmount": formData.get("ongoingAmount"),
+            "ongoingCostsAmount": parseInt(formData.get("ongoingAmount")),
             "frequency": formData.get("frequency"),
         },
-        "oneOffCosts": formData.get("oneOffCosts")
+        "oneOffCosts": parseInt(formData.get("oneOffCosts")),
+        "fudgeCheckmark": fudgeCheckmark
     }
     return fetch("/Calculator", {
         method:"post",
@@ -48,6 +58,12 @@ async function calculateSubtask(subtask) {
 
 const saveButton = document.getElementById("saveQuote")
 if (saveButton) {
+    const fudgeCheckmark = document.getElementById("fudgeCheckmark")
+    let checked = true
+
+    if (fudgeCheckmark) {
+        checked = fudgeCheckmark.checked
+    }
     saveButton.addEventListener("click", function(e){
         e.preventDefault()
         let subtasks = document.querySelectorAll(".subtask-form")
@@ -55,7 +71,7 @@ if (saveButton) {
         for (var i = 0; i < subtasks.length; i++) {
             let formData = new FormData(subtasks[i])
             let subtask = {
-                "paygrade": formData.get("payGrade"),
+                "paygrade": formData.get("paygrade"),
                 "time": formData.get("time"),
                 "period": formData.get("period"),
                 "payGradeAmount": formData.get("payGradeAmount"),
@@ -63,13 +79,16 @@ if (saveButton) {
                     "ongoingCostsAmount": formData.get("ongoingAmount"),
                     "frequency": formData.get("frequency"),
                 },
-                "oneOffCosts": formData.get("oneOffCosts")
+                "oneOffCosts": formData.get("oneOffCosts"),
+                
             }
             subtaskArray.push(subtask)
         }
         let body = {
+            "quote": document.getElementById("output").value,
             "name": document.getElementById("projectName").value,
-            "subtasks": subtaskArray
+            "subtasks": subtaskArray,
+            "fudgeCheckmark": checked,
         }
     
         fetch("/AddToQuotes", {
@@ -78,13 +97,61 @@ if (saveButton) {
             headers: {
                 'Content-Type': 'application/json'
             }
-        }).then(res=>res.json()).then(res=>{
+        }).then(res=>res.text()).then(res=>{
             console.log(res)
         })
     })
 }
 
 
+const updateButton = document.getElementById("updateQuote")
+if (updateButton) {
+    const fudgeCheckmark = document.getElementById("fudgeCheckmark")
+    let checked = true
+
+    if (fudgeCheckmark) {
+        checked = fudgeCheckmark.checked
+    }
+    updateButton.addEventListener("click", function(e){
+        e.preventDefault()
+        let subtasks = document.querySelectorAll(".subtask-form")
+        console.log(subtasks)
+        let subtaskArray = []
+        for (var i = 0; i < subtasks.length; i++) {
+            let formData = new FormData(subtasks[i])
+            let subtask = {
+                "paygrade": formData.get("paygrade"),
+                "time": formData.get("time"),
+                "period": formData.get("period"),
+                "payGradeAmount": formData.get("payGradeAmount"),
+                "ongoingCosts": {
+                    "ongoingCostsAmount": formData.get("ongoingAmount"),
+                    "frequency": formData.get("frequency"),
+                },
+                "oneOffCosts": formData.get("oneOffCosts"),
+                
+            }
+            subtaskArray.push(subtask)
+        }
+        let body = {
+            "quote": document.getElementById("output").value,
+            "name": document.getElementById("projectName").value,
+            "subtasks": subtaskArray,
+            "fudgeCheckmark": checked,
+            "id": document.getElementById("quoteId").value,
+        }
+    
+        fetch("/UpdateQuote", {
+            method:"post",
+            body: JSON.stringify(body),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }).then(res=>res.text()).then(res=>{
+            console.log(res)
+        })
+    })
+}
 
 
 function addSubtaskRow() {
@@ -93,6 +160,15 @@ function addSubtaskRow() {
 
     const workerList = document.getElementById("subtasks")
     workerList.appendChild(content)
+
+    const form = content.querySelector(".subtask-form")
+    const calculateSubtaskButton = content.querySelector(".subtaskQuote")
+    calculateSubtaskButton.addEventListener("click", async function(e){
+        const cost = await calculateSubtask(form)
+        const output = content.querySelector(".subtaskOutput")
+        output.innerHTML= new Intl.NumberFormat('en-GB', { style: 'currency', currency: 'GBP' })
+        .format(cost)
+    })
     updateSubtaskHeader()
     
 }

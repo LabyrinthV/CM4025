@@ -40,7 +40,8 @@ app.set("views", path.join(__dirname, "views"))
 
 app.get("/", function(req, res){
     let loggedin = req.session.loggedin;
-    res.render('pages/Calculator', {loggedin});
+    let admin = req.session.admin;
+    res.render('pages/Calculator', {loggedin, admin});
 });
 
 
@@ -146,6 +147,7 @@ app.get('/DeleteQuote/:id', async function(req, res){
             //Delete quote from database
             await Quote.findByIdAndDelete(req.params.id)
             res.status(200)
+            res.redirect('/Account')
 
         }    
     } catch (error) {
@@ -155,44 +157,19 @@ app.get('/DeleteQuote/:id', async function(req, res){
 
 // Post routes
 
-function parseNumberArray(incomingData: string | string[], targetArray: number[]) {
-    if (Array.isArray(incomingData)) {
-        for (let item of incomingData) {
-            targetArray.push(parseInt(item))
-        }
-    } else {
-        targetArray.push(parseInt(incomingData))
-    }
-}
-
-
-
 
 app.post("/Calculator", express.json(), function(req, res){
     try {
         let admin = req.session.admin ?? false;
-
         console.log(req.body)
-
-        const formData:subtaskForm = {
-            ongoingCosts: {
-                ongoingCostsAmount: parseInt(req.body.ongoingCostsAmount),
-                frequency: req.body.frequency,
-            },
-            oneOffCosts: req.body.oneOffCost,
-            time: req.body.time,
-            period: req.body.period,
-            payGrade: req.body.paygrade,
-            payGradeAmount: req.body.payGradeAmount
-        }    
     
-        let subtaskquote = calculateBudget(formData, admin)
-    
+        let subtaskquote = calculateBudget(req.body as subtaskForm)
+        console.log(subtaskquote)
         res.json({
             subtaskquote
         });
     } catch (error) {
-        
+        console.error(error)
     }
 })
 
@@ -243,8 +220,8 @@ app.post("/AddToQuotes", express.json(), async function(req, res){
         }
         let totalEstimate = 0;
         for (let subtask of req.body.subtasks) {
-            let estimate = 0;
-            // let estimate = calculateBudget(subtask);
+            console.log(subtask.paygrade)
+            let estimate = calculateBudget(subtask);
             subtask.subquote = estimate;
             totalEstimate += estimate;
         }
@@ -271,8 +248,37 @@ app.post("/AddToQuotes", express.json(), async function(req, res){
         }
     } catch (error) {
         res.status(500).send('Failed to add quote to user');
+        console.error(error)
     }
 });
+
+app.post("/UpdateQuote", express.json(), async function(req, res){
+    try {
+        if (!req.session.loggedin) { return; }
+        console.log(req.body.subtasks)
+        let totalEstimate = 0;
+        for (let subtask of req.body.subtasks) {
+            console.log(subtask.paygrade)
+            let estimate = calculateBudget(subtask);
+            subtask.subquote = estimate;
+            totalEstimate += estimate;
+        }
+        let quoteBody = {
+            quote: totalEstimate,
+            name: req.body.name,
+            subtasks: req.body.subtasks
+        }     
+
+        await Quote.findByIdAndUpdate(req.body.id, quoteBody)
+
+        res.status(200).send('Updated Quote');
+
+    } catch (error) {
+        res.status(500).send('Failed to add quote to user');
+        console.error(error)
+    }
+});
+
 
 
 mongoose.set('strictQuery', false);

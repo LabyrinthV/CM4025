@@ -21,16 +21,17 @@ const payGrades = {
 
   
   // Function to calculate final budget figure
-export function calculateBudget(options: subtaskForm, admin: boolean) {
+export function calculateBudget(options: subtaskForm) {
     let personelCost = 0
 
-    let hourlyRate = payGrades[options.payGrade].hourly;
-
-    // Fudge factor to hide exact hourly rate from users
-    let fudgeFactor = Math.random()*.4 + .8;
+    let hourlyRate = payGrades[options.paygrade].hourly;
 
     // Apply fudge factor to hourly rate
-    hourlyRate *= fudgeFactor;
+    if (options.fudgeCheckmark === true) {
+        // Fudge factor to hide exact hourly rate from users
+        let fudgeFactor = Math.random()*.4 + .8;
+        hourlyRate *= fudgeFactor;
+    }
 
     // Calculate hours worked P.S Assume worker works 8 hour work days 5 times a week
     let workHours = options.time

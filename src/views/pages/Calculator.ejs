@@ -19,6 +19,13 @@
         <div class="page-wrap">
             <main id="calculator-page">
                 <h2 id="calculator-title">Quote Calculator</h2>
+                <% if (locals.admin) { %>
+                    <!-- Make checkbox if admin wants fudge factor -->
+                    <label for="fudgeCheckmark">Use fudge factor</label>
+                    <input type="checkbox" id="fudgeCheckmark" name="fudgeCheckmark" value="fudgeCheckmark">
+
+                <% } %>
+
                 <% if (locals.loggedin) { %>
                     <label for="projectName">Project Name:</label>
                     <input type="text" id="projectName" name="projectName">
@@ -38,9 +45,9 @@
                                 <option value="month">Months</option>
                             </select>
                         </div>
-                        <label for="payGrade">Pay Grade:</label>
+                        <label for="paygrade">Pay Grade:</label>
                         <div class="form-controls">
-                            <select name="payGrade" id="payGrade">
+                            <select name="paygrade" id="paygrade">
                                 <option value="standard">Standard</option>
                                 <option value="junior">Junior</option>
                                 <option value="senior">Senior</option>
@@ -63,8 +70,9 @@
                     </div>
 
                     <div class="form-controls">
-                        <button>Calculate subtask</button>
+                        <button class="subtaskQuote">Calculate subtask</button>
                     </div>
+                    <div class="subtaskOutput"></div>
                 </form>
                 </div>
                   <div id="output"></div>
@@ -73,6 +81,14 @@
                     <% if (locals.loggedin) { %>
                       <button id="saveQuote">Save Quote</button>
                     <% } %>
+                  </div>
+
+                  <div id="explanation">
+                    <p>The project quote estimate is based on:
+                        Personel costs, which are calculated based on the time and pay grade of the personel required to complete the task,
+                        Ongoing costs, which are calculated based on the ongoing costs of the task, and,
+                        One-off costs, which are calculated based on the one-off costs of the task.
+                    </p>
                   </div>
             </main>
     
