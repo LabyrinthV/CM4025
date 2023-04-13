@@ -1,25 +1,27 @@
 const calculateQuoteButton = document.getElementById("calculateQuote")
 
 calculateQuoteButton.addEventListener("click", function(e){
-    calculateQuote().then(res=>{
-        console.log(res)
-    })
+    calculateQuote()
 })
 
 
 async function calculateQuote() {
     
-    const formElements = document.getElementById("subtasks").children
+    const formElements = document.getElementsByClassName("subtask-form")
     let total = 0
-    for (let formElement in formElements) {
+    for (let formElement of formElements) {
+        
         let cost = await calculateSubtask(formElement)
+        console.log(cost)
         total += cost
     }
-    return total
+    let output = document.getElementById("output")
+        output.innerHTML= new Intl.NumberFormat('en-GB', { style: 'currency', currency: 'GBP' })
+        .format(total)
 }
 
 async function calculateSubtask(subtask) {
-    let formData = new URLSearchParams(new FormData(subtask))
+    let formData = new FormData(subtask)
 
     let body = {
         "paygrade": formData.get("payGrade"),
@@ -34,71 +36,55 @@ async function calculateSubtask(subtask) {
     }
     return fetch("/Calculator", {
         method:"post",
-        body: body,
-        headers: {
-            'Content-Type': 'application/json'
-        }
-    }).then(res=>res.json()).then(res=>{
-        let output = document.getElementById("output")
-        console.log(output)
-        output.innerHTML= new Intl.NumberFormat('en-GB', { style: 'currency', currency: 'GBP' }).format(res.finalBudget)
-        return res.finalBudget
-    })
-}
-
-const saveButton = document.getElementById("saveQuote")
-
-saveButton.addEventListener("click", function(e){
-    e.preventDefault()
-    let subtasks = document.querySelectorAll(".subtask-form")
-    let subtaskArray = []
-    for (var i = 0; i < subtasks.length; i++) {
-        let formData = new FormData(subtasks[i])
-        let subtask = {
-            "paygrade": formData.get("payGrade"),
-            "time": formData.get("time"),
-            "period": formData.get("period"),
-            "payGradeAmount": formData.get("payGradeAmount"),
-            "ongoingCosts": {
-                "ongoingCostsAmount": formData.get("ongoingAmount"),
-                "frequency": formData.get("frequency"),
-            },
-            "oneOffCosts": formData.get("oneOffCosts")
-        }
-        subtaskArray.push(subtask)
-    }
-    let body = {
-        "name": document.getElementById("projectName").value,
-        "subtasks": subtaskArray
-    }
-
-
-    // let formData = new FormData(formElement)
-    // console.log(formData.get("time"))
-    // let body = {
-    //     "name": formData.get("projectName"),
-    //     "subtasks": [{
-    //         "paygrade": formData.get("payGrade"),
-    //         "time": formData.get("time"),
-    //         "period": formData.get("period"),
-    //         "payGradeAmount": formData.get("payGradeAmount"),
-    //         "ongoingCosts": {
-    //             "ongoingCostsAmount": formData.get("ongoingAmount"),
-    //             "frequency": formData.get("frequency"),
-    //         },
-    //         "oneOffCosts": formData.get("oneOffCosts")
-    //     }]
-    // }
-    fetch("/AddToQuotes", {
-        method:"post",
         body: JSON.stringify(body),
         headers: {
             'Content-Type': 'application/json'
         }
     }).then(res=>res.json()).then(res=>{
-        console.log(res)
+        return res.subtaskquote
     })
-})
+}
+
+
+const saveButton = document.getElementById("saveQuote")
+if (saveButton) {
+    saveButton.addEventListener("click", function(e){
+        e.preventDefault()
+        let subtasks = document.querySelectorAll(".subtask-form")
+        let subtaskArray = []
+        for (var i = 0; i < subtasks.length; i++) {
+            let formData = new FormData(subtasks[i])
+            let subtask = {
+                "paygrade": formData.get("payGrade"),
+                "time": formData.get("time"),
+                "period": formData.get("period"),
+                "payGradeAmount": formData.get("payGradeAmount"),
+                "ongoingCosts": {
+                    "ongoingCostsAmount": formData.get("ongoingAmount"),
+                    "frequency": formData.get("frequency"),
+                },
+                "oneOffCosts": formData.get("oneOffCosts")
+            }
+            subtaskArray.push(subtask)
+        }
+        let body = {
+            "name": document.getElementById("projectName").value,
+            "subtasks": subtaskArray
+        }
+    
+        fetch("/AddToQuotes", {
+            method:"post",
+            body: JSON.stringify(body),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }).then(res=>res.json()).then(res=>{
+            console.log(res)
+        })
+    })
+}
+
+
 
 
 function addSubtaskRow() {

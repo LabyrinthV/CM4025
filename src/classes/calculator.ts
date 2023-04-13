@@ -16,12 +16,12 @@ const payGrades = {
         hourly: 10,
         annual: 20000
     }
-  };
+  } as {[key: string]: {hourly: number, annual: number}};
   
 
   
   // Function to calculate final budget figure
-  export function calculateBudget(options:subtaskForm, admin: boolean) {
+export function calculateBudget(options: subtaskForm, admin: boolean) {
     let personelCost = 0
 
     let hourlyRate = payGrades[options.payGrade].hourly;

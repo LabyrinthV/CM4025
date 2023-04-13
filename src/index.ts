@@ -179,11 +179,11 @@ app.post("/Calculator", express.json(), function(req, res){
                 ongoingCostsAmount: parseInt(req.body.ongoingCostsAmount),
                 frequency: req.body.frequency,
             },
-            oneOffCosts: parseInt(req.body.oneOffCost),
-            time: parseInt(req.body.time),
+            oneOffCosts: req.body.oneOffCost,
+            time: req.body.time,
             period: req.body.period,
             payGrade: req.body.paygrade,
-            payGradeAmount: parseInt(req.body.payGradeAmount)
+            payGradeAmount: req.body.payGradeAmount
         }    
     
         let subtaskquote = calculateBudget(formData, admin)
