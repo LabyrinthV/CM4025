@@ -13,6 +13,7 @@ declare module "express-session" {
         user: string;
         currentuser: string;
         loggedin: boolean;
+        admin: boolean;
     }
 }
 
@@ -167,8 +168,10 @@ function parseNumberArray(incomingData: string | string[], targetArray: number[]
 
 
 
-app.post("/Calculator", express.urlencoded({extended:true}), function(req, res){
+app.post("/Calculator", express.json(), function(req, res){
     try {
+        let admin = req.session.admin ?? false;
+
         console.log(req.body)
 
         const formData:subtaskForm = {
@@ -179,32 +182,15 @@ app.post("/Calculator", express.urlencoded({extended:true}), function(req, res){
             oneOffCosts: parseInt(req.body.oneOffCost),
             time: parseInt(req.body.time),
             period: req.body.period,
-            payGrade: req.body.payGrade,
+            payGrade: req.body.paygrade,
             payGradeAmount: parseInt(req.body.payGradeAmount)
-        }
+        }    
     
-        // parseNumberArray(req.body.time, formData.time)
-        // parseNumberArray(req.body.payGradeAmount, formData.payGradeAmount)
-    
-        // if(typeof req.body.payGrade === "string") {
-        //     formData.payGrade.push(req.body.payGrade)
-        // } else {
-        //     formData.payGrade = req.body.payGrade
-        // }
-        // if (typeof req.body.period === "string") {
-        //     formData.period.push(req.body.period)
-        // } else {
-        //     formData.period = req.body.period
-        // }
-    
-    
-        let finalBudget = calculateBudget(formData)
+        let subtaskquote = calculateBudget(formData, admin)
     
         res.json({
-            finalBudget
+            subtaskquote
         });
-        console.log(formData)
-        res.json({})
     } catch (error) {
         
     }
@@ -227,6 +213,7 @@ app.post("/Login", express.urlencoded({extended:true}), async function(req, res)
 
     req.session.loggedin = true;
     req.session.currentuser = uname;
+    req.session.admin = user.admin;
     res.redirect('/');
 });
 

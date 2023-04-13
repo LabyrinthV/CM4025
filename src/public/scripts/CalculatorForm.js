@@ -1,20 +1,50 @@
-const formElements = document.querySelectorAll(".subtask")
+const calculateQuoteButton = document.getElementById("calculateQuote")
 
-formElements.addEventListener("submit", function(e){
-    e.preventDefault()
-    for (subtask in formElements) {
-        let formData = new URLSearchParams(new FormData(subtask))
-
-        fetch("/Calculator", {
-            method:"post",
-            body: formData
-        }).then(res=>res.json()).then(res=>{
-            let output = document.getElementById("output")
-            console.log(output)
-            output.innerHTML= new Intl.NumberFormat('en-GB', { style: 'currency', currency: 'GBP' }).format(res.finalBudget)
-        })
-    }
+calculateQuoteButton.addEventListener("click", function(e){
+    calculateQuote().then(res=>{
+        console.log(res)
+    })
 })
+
+
+async function calculateQuote() {
+    
+    const formElements = document.getElementById("subtasks").children
+    let total = 0
+    for (let formElement in formElements) {
+        let cost = await calculateSubtask(formElement)
+        total += cost
+    }
+    return total
+}
+
+async function calculateSubtask(subtask) {
+    let formData = new URLSearchParams(new FormData(subtask))
+
+    let body = {
+        "paygrade": formData.get("payGrade"),
+        "time": formData.get("time"),
+        "period": formData.get("period"),
+        "payGradeAmount": formData.get("payGradeAmount"),
+        "ongoingCosts": {
+            "ongoingCostsAmount": formData.get("ongoingAmount"),
+            "frequency": formData.get("frequency"),
+        },
+        "oneOffCosts": formData.get("oneOffCosts")
+    }
+    return fetch("/Calculator", {
+        method:"post",
+        body: body,
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    }).then(res=>res.json()).then(res=>{
+        let output = document.getElementById("output")
+        console.log(output)
+        output.innerHTML= new Intl.NumberFormat('en-GB', { style: 'currency', currency: 'GBP' }).format(res.finalBudget)
+        return res.finalBudget
+    })
+}
 
 const saveButton = document.getElementById("saveQuote")
 
@@ -94,4 +124,3 @@ function updateSubtaskHeader() {
         subtask_header[i].innerHTML = "Subtask " + (i+1) 
     }
 }
-

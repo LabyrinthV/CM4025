@@ -1,16 +1,7 @@
 import { time } from "console";
 import { subtaskForm } from "../types/subtask";
 
-interface Budget
-{
-    time: number,
-    period: string,
-    payGrade: "junior" | "standard" | "senior",
-    payGradeAmount: number,
-    ongoingCosts: number,
-    frequency: string,
-    oneOffCost: number
-}
+
 
 const payGrades = {
     senior: {
@@ -30,51 +21,48 @@ const payGrades = {
 
   
   // Function to calculate final budget figure
-  export function calculateBudget(options:subtaskForm) {
+  export function calculateBudget(options:subtaskForm, admin: boolean) {
     let personelCost = 0
-    let maxWorkHours = 0
 
-    for(let i = 0; i < options.time.length; i++){
-        // Look up hourly rate for pay grade
-        let hourlyRate = payGrades[options.payGrade[i]].hourly;
+    let hourlyRate = payGrades[options.payGrade].hourly;
 
-        // Fudge factor to hide exact hourly rate from users
-        let fudgeFactor = Math.random()*.5 + .75;
-    
-        // Apply fudge factor to hourly rate
-        hourlyRate *= fudgeFactor;
+    // Fudge factor to hide exact hourly rate from users
+    let fudgeFactor = Math.random()*.4 + .8;
 
-        // Calculate hours worked P.S Assume worker works 8 hour work days 5 times a week
-        let workHours = options.time[i]
+    // Apply fudge factor to hourly rate
+    hourlyRate *= fudgeFactor;
 
-        if(options.period[i] === 'day') {
-            workHours *= 8
-        } else if (options.period[i] === 'month') {
-            workHours *= 160
-        }
-        if (workHours > maxWorkHours) maxWorkHours = workHours;
-        personelCost += workHours * hourlyRate * options.payGradeAmount[i]
+    // Calculate hours worked P.S Assume worker works 8 hour work days 5 times a week
+    let workHours = options.time
+
+    if(options.period === 'day') {
+        workHours *= 8
+    } else if (options.period === 'month') {
+        workHours *= 160
     }
-
+    personelCost += workHours * hourlyRate * options.payGradeAmount
     
 
-    let frequencyValue: number
-    let ongoingCosts = options.ongoingCosts
+    // Calculate ongoing costs
+    let ongoingCosts = options.ongoingCosts.ongoingCostsAmount
+    let frequency = options.ongoingCosts.frequency
 
-    if(options.frequency === "week"){
-        let projectWeeks = maxWorkHours/40
+
+    if(frequency === "week"){
+        let projectWeeks = workHours/40
         ongoingCosts *= projectWeeks
-    } else if (options.frequency === "month"){
-        let projectMonths = maxWorkHours/160
+    } else if (frequency === "month"){
+        let projectMonths = workHours/160
         ongoingCosts *= projectMonths
     } else {
-        let projectYears = maxWorkHours/2080
+        let projectYears = workHours/2080
         ongoingCosts *= projectYears
     }
-  
+
+
     // Calculate final budget figure
-    let finalBudget = personelCost + options.oneOffCost + ongoingCosts;
+    let subtaskBudget = personelCost + options.oneOffCosts + ongoingCosts;
   
     // Return final budget figure
-    return Math.ceil(finalBudget);
+    return Math.ceil(subtaskBudget);
   }
